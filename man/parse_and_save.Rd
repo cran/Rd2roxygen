@@ -1,9 +1,8 @@
 \name{parse_and_save}
 \alias{parse_and_save}
-\title{Parse the input Rd file and save to a file...}
+\title{Parse the input Rd file and save the roxygen documentation into a file.}
 \usage{parse_and_save(path, file, usage=FALSE)}
-\description{Parse the input Rd file and save to a file
-Parse the input Rd file and save the roxygen documentation into a file}
+\description{Parse the input Rd file and save the roxygen documentation into a file.}
 \value{a character vector if \code{file} is not specified, or write the vector
 into a file}
 \author{Hadley Wickham; modified by Yihui Xie <\url{http://yihui.name}>}

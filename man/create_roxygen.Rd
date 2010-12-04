@@ -1,8 +1,8 @@
 \name{create_roxygen}
 \alias{create_roxygen}
-\title{Create the roxygen documentation...}
+\title{Create the roxygen documentation.}
 \usage{create_roxygen(info, usage=FALSE)}
-\description{Create the roxygen documentation}
+\description{Create the roxygen documentation.}
 \details{The parsed information is converted to a vector of roxygen tags.}
 \value{a character vector}
 \author{Hadley Wickham; modified by Yihui Xie <\url{http://yihui.name}>}

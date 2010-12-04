@@ -1,8 +1,8 @@
 \name{Rd2roxygen}
 \alias{Rd2roxygen}
-\title{Convert all the Rd files of a package to roxygen documentations...}
+\title{Convert all the Rd files of a package to roxygen documentations.}
 \usage{Rd2roxygen(pkg, nomatch, usage=FALSE)}
-\description{Convert all the Rd files of a package to roxygen documentations}
+\description{Convert all the Rd files of a package to roxygen documentations.}
 \details{This function takes a package root directory, parses all its Rd files under the
 man directory and update the corresponding R source code by inserting roxygen
 documentation in to the R scripts.}
