@@ -1,7 +1,7 @@
 \name{roxygen_and_build}
 \title{Roxygenize a package, clean up and build/check the package.}
-\usage{roxygen_and_build(pkg, roxygen.dir, install=FALSE, check=FALSE,
-    check.opts="", escape=TRUE, remove.check=TRUE, ...)}
+\usage{roxygen_and_build(pkg, roxygen.dir, install=FALSE, check=FALSE, check.opts="", escape=TRUE,
+    remove.check=TRUE, ...)}
 \description{Roxygenize a package, clean up and build/check the package.
 After the source package is roxygenized, this function first removes the
 unnecessary Rd files, replaces `\%' with `\\\%', and build the package. Optionally

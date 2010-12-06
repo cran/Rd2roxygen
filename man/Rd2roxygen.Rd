@@ -16,3 +16,6 @@ in Emacs/ESS.}
 is not found in any R source files (typically this happens to the data documentation);
 if not specified, the default will be `pkg'-package.R}
 \item{usage}{logical: whether to include the usage section in the output}}
+\examples{\dontrun{
+Rd2roxygen('path/to/your/source/package', install=TRUE)
+}}
