@@ -1,7 +1,8 @@
 \name{Rd2roxygen}
 \alias{Rd2roxygen}
 \title{Convert all the Rd files of a package to roxygen documentations.}
-\usage{Rd2roxygen(pkg, nomatch, usage=FALSE)}
+\usage{Rd2roxygen(pkg, nomatch, usage = FALSE)
+}
 \description{Convert all the Rd files of a package to roxygen documentations.}
 \details{This function takes a package root directory, parses all its Rd files under the
 man directory and update the corresponding R source code by inserting roxygen
@@ -15,7 +16,9 @@ in Emacs/ESS.}
 \item{nomatch}{the file name (base name only) to use when an object in the Rd file
 is not found in any R source files (typically this happens to the data documentation);
 if not specified, the default will be `pkg'-package.R}
-\item{usage}{logical: whether to include the usage section in the output}}
+\item{usage}{logical: whether to include the usage section in the output}
+}
 \examples{\dontrun{
-Rd2roxygen('path/to/your/source/package', install=TRUE)
+    Rd2roxygen("path/to/your/source/package", install = TRUE)
 }}
+
