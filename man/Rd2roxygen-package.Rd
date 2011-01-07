@@ -14,4 +14,3 @@ build packages using roxygen more easily (\code{\link{rab}}).}
 \docType{package}
 \author{Hadley Wickham and Yihui Xie}
 \examples{## see the package vignette: vignette('Rd2roxygen')}
-

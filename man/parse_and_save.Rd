@@ -11,4 +11,3 @@ into a file}
 \item{file}{the path to save the roxygen documentation}
 \item{usage}{logical: whether to include the usage section in the output}
 }
-

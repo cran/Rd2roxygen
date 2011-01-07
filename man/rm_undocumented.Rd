@@ -15,4 +15,3 @@ we have to use Rd2 in roxygen (this defaults to be \code{FALSE} but was changed
 to default to \code{TRUE} in \code{\link{rab}}).}
 \arguments{\item{pkg}{the directory of the source package}
 }
-

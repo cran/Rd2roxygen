@@ -43,9 +43,9 @@ escape the percent symbol sections; see
 \code{\link[roxygen]{roxygenize}}}
 }
 \examples{\dontrun{
-    roxygen_and_build("./Rd2roxygen", install = TRUE)
+    roxygen_and_build("Rd2roxygen", install = TRUE)
     ## or simply
-    rab("./Rd2roxygen", install = TRUE)
+    rab("Rd2roxygen", install = TRUE)
 }}
 \alias{rab}
 
