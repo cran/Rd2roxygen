@@ -2,6 +2,7 @@
 \alias{rm_undocumented}
 \title{Remove Rd files for the undocumented functions.}
 \usage{rm_undocumented(pkg)
+
 }
 \description{Remove Rd files for the undocumented functions.
 Usually roxygen will generate Rd files even for the undocumented functions, and

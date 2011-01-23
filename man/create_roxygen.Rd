@@ -2,6 +2,7 @@
 \alias{create_roxygen}
 \title{Create the roxygen documentation.}
 \usage{create_roxygen(info, usage = FALSE)
+
 }
 \description{Create the roxygen documentation.}
 \details{The parsed information is converted to a vector of roxygen tags.}

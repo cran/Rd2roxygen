@@ -2,6 +2,7 @@
 \alias{parse_file}
 \title{Parse the input Rd file to a list.}
 \usage{parse_file(path)
+
 }
 \description{Parse the input Rd file to a list.}
 \details{This function uses the function \code{parse_Rd} in the \pkg{tools} package
