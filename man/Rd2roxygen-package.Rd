@@ -1,8 +1,8 @@
 \name{Rd2roxygen-package}
 \alias{Rd2roxygen-package}
 \alias{Rd2roxygen-package}
-\title{Convert Rd to roxygen documentation and utilities to enhance roxygen.}
-\description{Convert Rd to roxygen documentation and utilities to enhance roxygen.
+\title{Convert Rd to roxygen documentation and utilities to enhance roxygen}
+\description{
 This package contains functions to convert Rd to roxygen documentation.
 It can parse an Rd file to a list (\code{\link{parse_file}}),
 create the roxygen documentation (\code{\link{create_roxygen}}) and

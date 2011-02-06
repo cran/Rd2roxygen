@@ -1,6 +1,6 @@
 \name{roxygen_and_build}
 \alias{roxygen_and_build}
-\title{Roxygenize a package, clean up and build/check the package.}
+\title{Roxygenize a package, clean up and build/check the package}
 \usage{roxygen_and_build(pkg, roxygen.dir, install = FALSE, 
     check = FALSE, check.opts = "", remove.check = TRUE, escape = TRUE, 
     reformat = TRUE, use.Rd2 = TRUE, ...)
@@ -36,7 +36,11 @@ default it is \code{pkg.roxygen})}
 \item{escape}{whether to escape \code{"\%"}}
 \item{reformat}{whether to reformat the examples and usage and
 escape the percent symbol sections; see
-\code{\link{reformat_code}}}
+\code{\link{reformat_code}}. Note roxygen will also write the
+title in the description by default unless the user specifies a
+@title tag, and this \code{reformat} option can also remove the
+redundant title string in the description as well as the period in
+the end of the title}
 \item{use.Rd2}{passed to \code{\link[roxygen]{roxygenize}}; see
 \code{\link[roxygen]{make.Rd2.roclet}}}
 \item{...}{other arguments passed to

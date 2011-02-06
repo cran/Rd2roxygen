@@ -1,6 +1,6 @@
 \name{parse_file}
 \alias{parse_file}
-\title{Parse the input Rd file to a list.}
+\title{Parse the input Rd file to a list}
 \usage{parse_file(path)
 
 }

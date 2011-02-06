@@ -1,6 +1,6 @@
 \name{Rd2roxygen}
 \alias{Rd2roxygen}
-\title{Convert all the Rd files of a package to roxygen documentations.}
+\title{Convert all the Rd files of a package to roxygen documentations}
 \usage{Rd2roxygen(pkg, nomatch, usage = FALSE)
 }
 \description{Convert all the Rd files of a package to roxygen documentations.}

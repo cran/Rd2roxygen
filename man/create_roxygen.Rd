@@ -1,6 +1,6 @@
 \name{create_roxygen}
 \alias{create_roxygen}
-\title{Create the roxygen documentation.}
+\title{Create the roxygen documentation}
 \usage{create_roxygen(info, usage = FALSE)
 
 }
