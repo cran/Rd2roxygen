@@ -2,8 +2,8 @@ Package: Rd2roxygen
 Type: Package
 Title: Convert Rd to roxygen documentation and utilities to enhance
         roxygen
-Version: 0.1-7
-Date: 2011-02-06
+Version: 0.1-8
+Date: 2011-02-15
 Author@R: c(person("Hadley", "Wickham", email = "h.wickham@gmail.com",
         role = "aut"), person("Yihui", "Xie", email = "xie@yihui.name",
         role = c("aut", "cre")))
@@ -21,6 +21,6 @@ License: GPL
 URL: https://github.com/yihui/Rd2roxygen, http://yihui.name/en/?p=645
 BugReports: https://github.com/yihui/Rd2roxygen/issues
 Collate: 'Rd2roxygen-package.R' 'rd2roxygen.R' 'utils.R'
-Packaged: 2011-02-06 21:32:13 UTC; yihui
+Packaged: 2011-02-16 23:31:50 UTC; yihui
 Repository: CRAN
-Date/Publication: 2011-02-07 09:50:10
+Date/Publication: 2011-02-17 13:06:50

@@ -1,11 +1,9 @@
 \name{roxygen_and_build}
 \alias{roxygen_and_build}
 \title{Roxygenize a package, clean up and build/check the package}
-\usage{roxygen_and_build(pkg, roxygen.dir, install = FALSE, 
-    check = FALSE, check.opts = "", remove.check = TRUE, escape = TRUE, 
-    reformat = TRUE, use.Rd2 = TRUE, ...)
-rab(...)
-}
+\usage{roxygen_and_build(pkg, roxygen.dir, install = FALSE, check = FALSE, check.opts = "", 
+    remove.check = TRUE, escape = TRUE, reformat = TRUE, use.Rd2 = TRUE, ...)
+rab(...)}
 \description{Roxygenize a package, clean up and build/check the package.}
 \details{\code{roxygen_and_build}: After the source package is roxygenized, this function first removes the
 unnecessary Rd files, and build the package. Optionally
@@ -47,6 +45,7 @@ the end of the title}
 \code{\link[roxygen]{roxygenize}}}
 }
 \examples{\dontrun{
+    
     roxygen_and_build("Rd2roxygen", install = TRUE)
     ## or simply
     rab("Rd2roxygen", install = TRUE)

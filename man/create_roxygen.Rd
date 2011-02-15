@@ -14,8 +14,7 @@ can be useful when there are multiple functions in a single usage section, but
 generally it is not necessary because roxygen can generate the usage section
 automatically)}
 }
-\examples{rd.file = system.file("examples", "parse_and_save.Rd", 
-    package = "Rd2roxygen")
+\examples{rd.file = system.file("examples", "parse_and_save.Rd", package = "Rd2roxygen")
 options(roxygen.comment = "##' ")
 create_roxygen(parse_file(rd.file))}
 

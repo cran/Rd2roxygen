@@ -11,7 +11,6 @@ to parse the Rd file.}
 \author{Hadley Wickham; modified by Yihui Xie <\url{http://yihui.name}>}
 \arguments{\item{path}{the path of the Rd file}
 }
-\examples{rd.file = system.file("examples", "parse_and_save.Rd", 
-    package = "Rd2roxygen")
+\examples{rd.file = system.file("examples", "parse_and_save.Rd", package = "Rd2roxygen")
 parse_file(rd.file)}
 
