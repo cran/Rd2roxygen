@@ -1,4 +1,4 @@
-##' Parse the input Rd file to a list.
+##' Parse the input Rd file to a list
 ##'
 ##' This function uses the function \code{parse_Rd} in the \pkg{tools} package
 ##' to parse the Rd file.
@@ -60,7 +60,7 @@ parse_file <- function(path) {
 }
 
 
-##' Create the roxygen documentation.
+##' Create the roxygen documentation
 ##'
 ##' The parsed information is converted to a vector of roxygen tags.
 ##'
@@ -79,6 +79,7 @@ parse_file <- function(path) {
 create_roxygen <- function(info, usage = FALSE) {
   c(
     comment_line(info$title),
+    comment_line(),
     comment_line(info$desc),
     comment_line(),
     comment_line(info$details),
@@ -111,7 +112,8 @@ create_roxygen <- function(info, usage = FALSE) {
   )
 }
 
-##' Parse the input Rd file and save the roxygen documentation into a file.
+##' Parse the input Rd file and save the roxygen documentation into a
+##' file
 ##'
 ##' @param path the path of the Rd file
 ##' @param file the path to save the roxygen documentation
@@ -128,7 +130,7 @@ parse_and_save <- function(path, file, usage = FALSE) {
 }
 
 
-##' Convert all the Rd files of a package to roxygen documentations.
+##' Convert all the Rd files of a package to roxygen documentations
 ##'
 ##' This function takes a package root directory, parses all its Rd files under the
 ##' man directory and update the corresponding R source code by inserting roxygen
@@ -147,7 +149,7 @@ parse_and_save <- function(path, file, usage = FALSE) {
 ##' @author Yihui Xie <\url{http://yihui.name}>
 ##' @examples
 ##' \dontrun{
-##' Rd2roxygen('path/to/your/source/package', install=TRUE)
+##' Rd2roxygen('path/to/your/source/package')
 ##' }
 Rd2roxygen <- function(pkg, nomatch, usage = FALSE) {
 	if (!all(c('man', 'R') %in% list.files(pkg)))
