@@ -130,67 +130,98 @@ parse_and_save <- function(path, file, usage = FALSE) {
 }
 
 
-##' Convert all the Rd files of a package to roxygen documentations
+##' Convert all the Rd files of a package to roxygen comments
 ##'
-##' This function takes a package root directory, parses all its Rd files under the
-##' man directory and update the corresponding R source code by inserting roxygen
-##' documentation in to the R scripts.
+##' This function takes a package root directory, parses all its Rd
+##' files under the man directory and update the corresponding R
+##' source code by inserting roxygen documentation in to the R
+##' scripts.
 ##'
 ##' @param pkg the root directory of the package
-##' @param nomatch the file name (base name only) to use when an object in the Rd file
-##' is not found in any R source files (typically this happens to the data documentation);
-##' if not specified, the default will be `pkg'-package.R
-##' @param usage logical: whether to include the usage section in the output
-##' @return NULL (but the process of conversion will be printed on screen)
-##' @note ESS users may use \code{options(roxygen.comment = "##' ")} to ensure the
-##' generated roxygen comments begin with \code{"##' "}, which is the default setting
-##' in Emacs/ESS.
+##' @param nomatch the file name (base name only) to use when an
+##' object in the Rd file is not found in any R source files
+##' (typically this happens to the data documentation); if not
+##' specified, the default will be `pkg'-package.R
+##' @param usage logical: whether to include the usage section in the
+##' output
+##' @return NULL (but the process of conversion will be printed on
+##' screen)
+##' @note ESS users may use \code{options(roxygen.comment = "##' ")}
+##' to ensure the generated roxygen comments begin with \code{"##' "},
+##' which is the default setting in Emacs/ESS.
+##'
+##' Re-run this function on a package will remove the previous roxygen
+##' comments before functions in R scripts.
 ##' @export
 ##' @author Yihui Xie <\url{http://yihui.name}>
 ##' @examples
-##' \dontrun{
-##' Rd2roxygen('path/to/your/source/package')
-##' }
+##' ## a demo package
+##' pkg = system.file('examples', 'pkgDemo', package = 'Rd2roxygen')
+##' file.copy(pkg, tempdir(), recursive = TRUE)  # copy to temp dir first
+##' od = setwd(tempdir())
+##'
+##' ## take a look at original R scripts
+##' file.show('pkgDemo/R/foo.R')
+##'
+##' options(roxygen.comment = "##' ")
+##'
+##' ## convert Rd's under man to roxygen comments
+##' Rd2roxygen(file.path(tempdir(), 'pkgDemo'))
+##'
+##' file.show('pkgDemo/R/foo.R')  # what happened to foo.R and bar.R?
+##'
+##' setwd(od)  # restore working directory
 Rd2roxygen <- function(pkg, nomatch, usage = FALSE) {
-	if (!all(c('man', 'R') %in% list.files(pkg)))
-		stop("'pkg' has to be the root directory of a source package")
-	man.dir <- file.path(pkg, 'man')
-	R.dir <- file.path(pkg, 'R')
-	files <- list.files(man.dir, '\\.[Rr]d$')
-	if (missing(nomatch))
-		nomatch <- paste(basename(pkg), '-package.R', sep = '')
-	unlink(p <- file.path(R.dir, nomatch))
-	for (f in files) {
-		timestamp()
-		parsed <- parse_file(file.path(man.dir, f))
-		Rd <- create_roxygen(parsed, usage = usage)
-		Rd <- Rd[Rd != '\n']
-		message('parsed: ', f)
-		fname <- parsed$name
-		tryf <- paste(fname, c('.R', '.r'), sep = '')
-		tryf <- unique(c(tryf[file.exists(file.path(R.dir, tryf))],
-				list.files(R.dir, '\\.[Rr]$')))
-		idx <- integer(0)
-		message("looking for the object '", fname, "' in:")
-		for (i in tryf) {
-			r <- file.path(R.dir, i)
-			idx <- grep(sprintf('^[[:space:]]*(`|)(%s)(`|)[[:space:]]*(<-|=)',
-				gsub('\\.', '\\\\.', fname)),
-			(r.Rd <- readLines(r, warn = FALSE)))
-			message('  ', i, ': ', appendLF = FALSE)
-			message(ifelse(length(idx), paste('row', idx), 'not found'))
-			if (length(idx)) break
-		}
-		if (length(idx)) {
-			cat(append(r.Rd, c('\n', Rd), idx - 1), file = r, sep = '\n')
-			message(r, ' updated')
-		} else {
-			cat(c('\n', Rd, 'NULL'), '\n\n', file = p, sep = '\n', append = TRUE)
-			message("unmatched object '", fname, "' written into ", p)
-		}
-		message('\n')
-		if (.Platform$OS.type == 'windows') {
-			flush.console()
-		}
-	}
+    if (!all(c('man', 'R') %in% list.files(pkg)))
+        stop("'pkg' has to be the root directory of a source package")
+    man.dir <- file.path(pkg, 'man')
+    R.dir <- file.path(pkg, 'R')
+    files <- list.files(man.dir, '\\.[Rr]d$')
+    if (missing(nomatch))
+        nomatch <- paste(basename(pkg), '-package.R', sep = '')
+    unlink(p <- file.path(R.dir, nomatch))
+    for (f in files) {
+        timestamp()
+        parsed <- parse_file(file.path(man.dir, f))
+        Rd <- create_roxygen(parsed, usage = usage)
+        Rd <- Rd[Rd != '\n']
+        message('parsed: ', f)
+        fname <- parsed$name
+        tryf <- paste(fname, c('.R', '.r'), sep = '')
+        tryf <- unique(c(tryf[file.exists(file.path(R.dir, tryf))],
+                         list.files(R.dir, '\\.[Rr]$')))
+        idx <- integer(0)
+        message("looking for the object '", fname, "' in:")
+        for (i in tryf) {
+            r <- file.path(R.dir, i)
+            idx <- grep(sprintf('^[[:space:]]*(`|"|\'|)(%s)(`|"|\'|)[[:space:]]*(<-|=)',
+                                gsub('\\.', '\\\\.', fname)),
+                        (r.Rd <- readLines(r, warn = FALSE)))
+            message('  ', i, ': ', appendLF = FALSE)
+            message(ifelse(length(idx), paste('line', idx), 'not found'))
+            if (length(idx)) break
+        }
+        if (length(idx)) {
+            if (idx <= 1) r.Rd <- c(Rd, r.Rd) else {
+                ## remove existing roxygen comments
+                j = 0
+                for(i in (idx - 1):1) {
+                    if (grepl("^[#]+'", r.Rd[i])) j <- j + 1 else break
+                }
+                if (j > 0) {
+                    r.Rd <- r.Rd[-(idx - seq_len(j))]
+                    idx <- idx - j
+                }
+                r.Rd <- append(r.Rd, c('\n', Rd), idx - 1)
+                while (r.Rd[1] %in% c('', '\n')) r.Rd <- r.Rd[-1]
+            }
+            cat(r.Rd, file = r, sep = '\n')
+            message(r, ' updated')
+        } else {
+            cat(c('\n', Rd, 'NULL'), '\n\n', file = p, sep = '\n', append = TRUE)
+            message("unmatched object '", fname, "' written into ", p)
+        }
+        message('\n')
+        flush.console()
+    }
 }
