@@ -44,7 +44,7 @@ comment_line <- function(x, exdent = 0) {
 comment_tag <- function(tag, value) {
   if (is.null(value) || value == "" || length(value) == 0) return()
 
-  comment_line(paste(tag, value), exdent = 2)
+  comment_line(paste(tag, value), exdent = 0)
 }
 
 ## access the comment prefix
@@ -98,7 +98,7 @@ roxygen_and_build = function(pkg, roxygen.dir = pkg, build = TRUE, install = FAL
     res =
         if (length(ver <- grep('^Version:',
                                readLines(file.path(pkg, 'DESCRIPTION')), value = TRUE)))
-            sprintf('%s_%s.tar.gz', roxygen.dir,
+            sprintf('%s_%s.tar.gz', basename(roxygen.dir),
                     gsub('[[:space:]]', '', sub('^Version:', '', ver))) else roxygen.dir
     if (build && install) system(sprintf("R CMD INSTALL %s ", res))
     if (build && check) {
@@ -157,7 +157,7 @@ reformat_code = function(path, ...) {
         ## tags after \examples?
         idx1 = grep(tags, rd)
         if (length(idx1) && any(idx1 > idx0))
-            idx1 = min(idx1[idx1 > idx0]) - 1 else idx1 = length(rd)
+            idx1 = min(idx1[idx1 > idx0]) - 1 else idx1 = tail(grep('\\}$', rd), 1)
         tmp = rd[idx0:idx1]
         tmp[1] = sub('^\\\\examples\\{', '', tmp[1])
         nn = length(tmp)

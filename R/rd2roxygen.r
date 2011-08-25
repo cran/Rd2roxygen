@@ -50,11 +50,12 @@ parse_file <- function(path) {
   # Pull apart arguments
   arguments <- rd$arguments
   arguments <- arguments[sapply(arguments, tag) != "TEXT"]
-  out$params <- sapply(arguments, function(argument) {
+  out$params <- unlist(sapply(arguments, function(argument) {
+    if (tag(argument) != '\\item') return(NULL)
     paste(if (tag(argument[[1]][[1]]) == "\\dots")
 		"\\dots" else gsub(' +', '', argument[[1]]),
 	reconstruct(argument[[2]]))
-  })
+  }))
 
   out
 }
@@ -191,7 +192,9 @@ Rd2roxygen <- function(pkg, nomatch, usage = FALSE) {
         tryf <- unique(c(tryf[file.exists(file.path(R.dir, tryf))],
                          list.files(R.dir, '\\.[Rr]$')))
         idx <- integer(0)
-        message("looking for the object '", fname, "' in:")
+        ## should not search data/package names in R scripts
+        if (isTRUE(parsed$docType %in% c('data', 'package')))
+            tryf <- NULL else message("looking for the object '", fname, "' in:")
         for (i in tryf) {
             r <- file.path(R.dir, i)
             idx <- grep(sprintf('^[[:space:]]*(`|"|\'|)(%s)(`|"|\'|)[[:space:]]*(<-|=)',
@@ -202,6 +205,7 @@ Rd2roxygen <- function(pkg, nomatch, usage = FALSE) {
             if (length(idx)) break
         }
         if (length(idx)) {
+            idx <- idx[1]  # only use the first match
             if (idx <= 1) r.Rd <- c(Rd, r.Rd) else {
                 ## remove existing roxygen comments
                 j = 0
