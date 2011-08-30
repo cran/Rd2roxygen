@@ -91,6 +91,7 @@ roxygen_and_build = function(pkg, roxygen.dir = pkg, build = TRUE, install = FAL
         unlink(sprintf("%s/.git", roxygen.dir), recursive = TRUE)
     rd.list = list.files(file.path(roxygen.dir, "man"), ".*\\.Rd$", all.files = TRUE, full.names = TRUE)
     if (reformat) {
+        message('Reformatting usage and examples')
         for (f in rd.list) reformat_code(f)
     }
     if (build) system(sprintf("R CMD build %s ", roxygen.dir)) else return()
@@ -203,10 +204,12 @@ reformat_code = function(path, ...) {
         nn = length(tmp)
         tmp[nn] = sub('\\}$', '', tmp[nn])
         txt = gsub('\\%', '%', tmp, fixed = TRUE) # will escape % later
+        txt = gsub('\\\\method\\{([^\\{]+)\\}\\{([^\\{]+)\\}', 'method@\\1@\\2', txt) # S3
         txt =
             try(tidy.source(text = txt, output = FALSE, keep.blank.line = TRUE,
                             ...)$text.tidy, silent = TRUE)
         if (!inherits(txt, 'try-error')) {
+            txt = gsub('method@([^@]+)@([^\\(]+)', '\\\\method{\\1}{\\2}', txt) # restore S3
             txt = gsub("(^|[^\\])%", "\\1\\\\%", txt)
             if (txt[1] == '') txt = txt[-1]
             if (txt[length(txt)] == '') txt = txt[-length(txt)]
