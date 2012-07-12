@@ -1,3 +1,24 @@
+		  CHANGES IN Rd2roxygen VERSION 1.1
+
+NEW FEATURES
+
+  o \item{} in the \value{} section will be formatted as the
+  @returnItem tag, which is a new tag in roxygen2 (> 2.2.2) (#8)
+  (thanks, Andreas Alfons)
+
+  o R code in \dontrun{}, \dontshow{} and \donttest{} can be
+  reformatted by formatR now
+
+MINOR CHANGES
+
+  o the vignette is built with knitr via the Makefile; in previous
+  versions, it was a fake Rnw document (essentially a weaved tex file)
+
+  o dependency on roxygen2 and formatR was changed to Imports
+
+  o default value for 'check.opts' in rab() is '--as-cran' now
+
+
 		  CHANGES IN Rd2roxygen VERSION 1.0-7
 
 NEW FEATURES

@@ -1,11 +1,10 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 417
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
 \begin_document
 \begin_header
 \textclass article
 \begin_preamble
 %\VignetteIndexEntry{Rd2roxygen: Convert Rd to roxygen documentation and utilities to enhance R documentation}
-% \usepackage{Sweave}
 \end_preamble
 \use_default_options false
 \begin_modules
@@ -50,7 +49,6 @@ knitr
 \use_esint 1
 \use_mhchem 1
 \use_mathdots 1
-\use_undertilde 1
 \cite_engine natbib_authoryear
 \use_bibtopic false
 \use_indices false
@@ -124,19 +122,17 @@ status open
 
 \begin_layout Plain Layout
 
-% 
-\backslash
-SweaveOpts{comment=,message=FALSE}
-\end_layout
-
-\begin_layout Plain Layout
-
 <<setup, echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-options(keep.blank.line = FALSE, width=90)
+if (require('knitr')) opts_chunk$set(comment=NA, message=FALSE)
+\end_layout
+
+\begin_layout Plain Layout
+
+options(keep.blank.line = FALSE, width=80)
 \end_layout
 
 \begin_layout Plain Layout
@@ -157,7 +153,7 @@ Rd2roxygen
  
 \begin_inset CommandInset citation
 LatexCommand citep
-key "Rd2roxygen-manual"
+key "R-Rd2roxygen"
 
 \end_inset
 
@@ -169,7 +165,7 @@ roxygen2
  
 \begin_inset CommandInset citation
 LatexCommand citep
-key "roxygen2-manual"
+key "R-roxygen2"
 
 \end_inset
 
@@ -467,12 +463,12 @@ status open
 
 \begin_layout Plain Layout
 
-<<reformat-ex1,echo=FALSE>>=
+<<reformat-ex1,eval=FALSE,tidy=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-cat("## original code
+## original code
 \end_layout
 
 \begin_layout Plain Layout
@@ -482,9 +478,7 @@ rab=function(pkg,roxygen.dir=pkg,build=TRUE,install=FALSE,
 
 \begin_layout Plain Layout
 
-check=FALSE,check.opts='',remove.check=TRUE,reformat=TRUE,...){}",'
-\backslash
-n')
+check=FALSE,check.opts='',remove.check=TRUE,reformat=TRUE,...){}
 \end_layout
 
 \begin_layout Plain Layout
@@ -530,7 +524,7 @@ formatR
  
 \begin_inset CommandInset citation
 LatexCommand citep
-key "formatR-manual"
+key "R-formatR"
 
 \end_inset
 
@@ -565,12 +559,23 @@ knitr
  
 \begin_inset CommandInset citation
 LatexCommand citep
-key "knitr-manual"
+key "R-knitr"
 
 \end_inset
 
 .
- The real vignette is in LyX, which can be found here:
+ The real vignette is in LyX, which can be found at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://github.com/yihui/Rd2roxygen/tree/master/inst/doc
+\end_layout
+
+\end_inset
+
+, and the corresponding Rnw source is here:
 \end_layout
 
 \begin_layout Standard
@@ -584,7 +589,7 @@ status open
 
 \begin_layout Plain Layout
 
-system.file('doc', 'formatR.lyx', package='formatR')
+system.file('doc', 'Rd2roxygen.Rnw', package='Rd2roxygen')
 \end_layout
 
 \begin_layout Plain Layout
@@ -608,12 +613,42 @@ status collapsed
 
 \begin_layout Plain Layout
 
-https://github.com/yihui/lyx
+http://yihui.name/knitr/demo/lyx/
 \end_layout
 
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<write-bib, include=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# automatically write the bibliography database
+\end_layout
+
+\begin_layout Plain Layout
+
+if (require('knitr')) write_bib(c('Rd2roxygen', 'roxygen2', 'formatR', 'knitr'),
+ file = 'Rd2roxygen.bib')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
