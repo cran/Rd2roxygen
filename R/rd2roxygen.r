@@ -88,7 +88,7 @@ parse_file <- function(path) {
 #' options(roxygen.comment = "##' ")
 #' create_roxygen(parse_file(rd.file))
 create_roxygen <- function(info, usage = FALSE) {
-  c(comment_line(info$title),
+  res <- c(comment_line(info$title),
     comment_line(),
     comment_line(info$desc),
     comment_line(),
@@ -117,7 +117,11 @@ create_roxygen <- function(info, usage = FALSE) {
               gsub("\n", paste("\n", comment_prefix(), sep = ""),
                    info$examples),
               sep = ""))
-    }, "\n")
+    },
+    if (!is.null(info$docType) && (info$docType %in% c('package', 'data')))
+      "NULL", "\n")
+  # remove empty lines
+  res[grep("^\\s*$", res, invert = TRUE)]
 }
 
 #' Parse the input Rd file and save the roxygen documentation into a file
@@ -135,6 +139,20 @@ parse_and_save <- function(path, file, usage = FALSE) {
     cat(paste(output, collapse = "\n"), file = file)
 }
 
+# a simple-minded function to extract exported names in NAMESPACE; it only
+# considers export(*), and other objects like S3method(), import() and
+# useDynlib() are all ignored
+exported_names <- function(pkg) {
+  if (require(basename(pkg), character.only = TRUE))
+    return(ls(paste('package', basename(pkg), sep = ':'), all.names = TRUE))
+  if (!file.exists(f <- file.path(pkg, 'NAMESPACE'))) {
+    warning('the package ', pkg, ' does not have a NAMESPACE')
+    return()
+  }
+  NAMESPACE <- readLines(f)
+  exported <- grep('^\\s*export\\(.+\\)\\s*$', NAMESPACE, value = TRUE)
+  gsub('^\\s*export\\((.+)\\)\\s*$', '\\1', exported)
+}
 
 #' Convert all the Rd files of a package to roxygen comments
 #'
@@ -181,6 +199,7 @@ Rd2roxygen <- function(pkg, nomatch, usage = FALSE) {
   if (missing(nomatch))
     nomatch <- paste(basename(pkg), '-package.R', sep = '')
   unlink(p <- file.path(R.dir, nomatch))
+  namespace <- exported_names(pkg)
   for (f in files) {
     timestamp()
     parsed <- parse_file(file.path(man.dir, f))
@@ -197,12 +216,16 @@ Rd2roxygen <- function(pkg, nomatch, usage = FALSE) {
       tryf <- NULL else message("looking for the object '", fname, "' in:")
     for (i in tryf) {
       r <- file.path(R.dir, i)
-      idx <- grep(sprintf('^[[:space:]]*(`|"|\'|)(%s)(`|"|\'|)[[:space:]]*(<-|=)',
+      idx <- grep(sprintf('^[[:space:]]*(`|"|\'|)(%s)(\\1)[[:space:]]*(<-|=)',
                           gsub('\\.', '\\\\.', fname)),
                   (r.Rd <- readLines(r, warn = FALSE)))
       message('  ', i, ': ', appendLF = FALSE)
       message(ifelse(length(idx), paste('line', idx), 'not found'))
-      if (length(idx)) break
+      if (length(idx)) {
+        # add @export to roxygen comments
+        if (fname %in% namespace) Rd <- c(Rd, comment_tag('@export', fname))
+        break
+      }
     }
     if (length(idx)) {
       idx <- idx[1]  # only use the first match
@@ -222,7 +245,8 @@ Rd2roxygen <- function(pkg, nomatch, usage = FALSE) {
       cat(r.Rd, file = r, sep = '\n')
       message(r, ' updated')
     } else {
-      cat(c('\n', Rd, 'NULL'), '\n\n', file = p, sep = '\n', append = TRUE)
+      if (tail(Rd, 1) != 'NULL') Rd <- c(Rd, 'NULL')
+      cat(c('\n', Rd), '\n\n', file = p, sep = '\n', append = TRUE)
       message("unmatched object '", fname, "' written into ", p)
     }
     message('\n')
