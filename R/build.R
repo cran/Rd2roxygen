@@ -5,9 +5,8 @@
 #' code in the usage and examples sections. Note \code{\link{rab}} is an alias
 #' of \code{\link{roxygen_and_build}}.
 #' @param pkg the root directory of the source package
-#' @param roxygen.dir the directory for the roxygenized package (by default it
-#'   is the same as \code{pkg})
 #' @param build whether to build the package
+#' @param build.opts options to be passed to \command{R CMD build}
 #' @param install whether to install the package
 #' @param check whether to check the package
 #' @param check.opts options to check the package (e.g. \code{"--no-examples"})
@@ -19,28 +18,37 @@
 #' @return \code{NULL}
 #' @author Yihui Xie <\url{http://yihui.name}>
 #' @rdname roxygen_and_build
+#' @importFrom roxygen2 roxygenize
 #' @export
 #' @examples \dontrun{
 #' roxygen_and_build("Rd2roxygen", install = TRUE)
 #' ## or simply
 #' rab('Rd2roxygen', install = TRUE)
 #' }
-roxygen_and_build = function(pkg, roxygen.dir = pkg, build = TRUE, install = FALSE,
-                             check = FALSE, check.opts = "--as-cran", remove.check = TRUE,
-                             reformat = TRUE, ...) {
-  roxygenize(pkg, roxygen.dir, ...)
-  rd.list = list.files(file.path(roxygen.dir, "man"), ".*\\.Rd$", all.files = TRUE,
+roxygen_and_build = function(
+  pkg, build = TRUE, build.opts = '--no-manual', install = FALSE, check = FALSE,
+  check.opts = '--as-cran --no-manual', remove.check = TRUE, reformat = TRUE, ...
+) {
+  roxygenize(pkg, ...)
+  rd.list = list.files(file.path(pkg, 'man'), '.*\\.Rd$', all.files = TRUE,
                        full.names = TRUE)
   if (reformat) {
     message('Reformatting usage and examples')
     for (f in rd.list) reformat_code(f)
   }
-  if (build) system(sprintf("R CMD build %s ", roxygen.dir)) else return()
-  pv = read.dcf(file.path(pkg, 'DESCRIPTION'), fields=c('Package', 'Version'))
+  if (!build) return()
+  desc = file.path(pkg, 'DESCRIPTION')
+  x = readLines(desc, warn = FALSE)
+  if (length(i <- grep('^Roxygen: ', x))) {
+    writeLines(x[-i], desc)  # exclude the Roxygen field; R CMD check will warn
+    on.exit(writeLines(x, desc))
+  }
+  system(sprintf('R CMD build %s %s', build.opts, pkg))
+  pv = read.dcf(desc, fields=c('Package', 'Version'))
   res = sprintf('%s_%s.tar.gz', pv[1, 1], pv[1, 2])
-  if (install) system(sprintf("R CMD INSTALL %s ", res))
+  if (install) system(sprintf('R CMD INSTALL %s ', res))
   if (check) {
-    if ((system(sprintf("R CMD check %s %s", res, check.opts)) == 0) &&
+    if ((system(sprintf('R CMD check %s %s', res, check.opts)) == 0) &&
       remove.check) unlink(sprintf('%s.Rcheck', pv[1, 1]), TRUE)
   }
   invisible(NULL)
@@ -81,13 +89,7 @@ rab = roxygen_and_build
 #' file.show(fmt.file)  ## the formatted Rd
 reformat_code = function(path, ...) {
   rd = readLines(path)
-  tags = sprintf(
-    '^\\\\(%s)\\{',
-    paste(c("docType", "name", "alias", "title", "format", "source", "usage",
-            "arguments", "value", "description", "details", "note", "section",
-            "examples", "author", "references", "seealso", "concept", "keyword",
-            "subsection"), collapse = "|")
-  )
+  tags = tags_possible
   if (length(idx0 <- grep('^\\\\examples\\{', rd))) {
     # tags after \examples?
     idx1 = grep(tags, rd)
@@ -101,7 +103,7 @@ reformat_code = function(path, ...) {
     txt = sub('^\\\\+dont(run|test|show)', 'tag_name_dont\\1 <- function() ', txt)
     txt = tidy.code(txt, ...)
     if (!inherits(txt, 'try-error')) {
-      txt = gsub("(^|[^\\])%", "\\1\\\\%", txt)
+      txt = gsub('(^|[^\\])%', '\\1\\\\%', txt)
       txt = gsub('tag_name_dont(run|test|show) <- function\\(\\) \\{', '\\\\dont\\1{', txt)
       txt[txt == ''] = '\n'
       txt = unlist(strsplit(txt, '\n'))
@@ -139,7 +141,7 @@ reformat_code = function(path, ...) {
     txt = tidy.code(txt, ...)
     if (!inherits(txt, 'try-error')) {
       txt = gsub('`method@([^@]+)@([^`]+)`', '\\\\method{\\1}{\\2}', txt) # restore S3
-      txt = gsub("(^|[^\\])%", "\\1\\\\%", txt)
+      txt = gsub('(^|[^\\])%', '\\1\\\\%', txt)
       if (txt[1] == '') txt = txt[-1]
       if (txt[length(txt)] == '') txt = txt[-length(txt)]
       txt = sprintf('\\usage{\n%s\n}', paste(txt, collapse = '\n'))
@@ -155,6 +157,13 @@ reformat_code = function(path, ...) {
   writeLines(rd, path)
   flush.console()
 }
+
+# possible tags after \example{} or \usage{}
+tags_possible = sprintf('^\\\\(%s)\\{', paste(c(
+  'docType', 'name', 'alias', 'title', 'format', 'source', 'usage', 'arguments',
+  'value', 'description', 'details', 'note', 'section', 'examples', 'author',
+  'references', 'seealso', 'concept', 'keyword', 'subsection'
+), collapse = '|'))
 
 tidy.code = function(code, ...) {
   res = try(tidy.source(text = code, output = FALSE, width.cutoff = 80, ...)$text.tidy)

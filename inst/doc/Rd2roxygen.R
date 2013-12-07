@@ -36,13 +36,13 @@ formatR::usage(rab)
 
 ## ----reformat-ex1,eval=FALSE,tidy=FALSE----------------------------------
 ## ## original code
-## rab=function(pkg,roxygen.dir=pkg,build=TRUE,install=FALSE,
+## rab=function(pkg,build=TRUE,install=FALSE,
 ## check=FALSE,check.opts='',remove.check=TRUE,reformat=TRUE,...){}
 
 
 ## ----reformat-ex2,eval=FALSE---------------------------------------------
 ## ## the reformatted code; note the spaces and indent
-## rab=function(pkg,roxygen.dir=pkg,build=TRUE,install=FALSE,
+## rab=function(pkg,build=TRUE,install=FALSE,
 ## check=FALSE,check.opts='',remove.check=TRUE,reformat=TRUE,...){}
 
 

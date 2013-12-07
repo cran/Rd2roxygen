@@ -3,19 +3,21 @@
 \alias{roxygen_and_build}
 \title{Roxygenize a package, clean up and build/check the package}
 \usage{
-roxygen_and_build(pkg, roxygen.dir = pkg, build = TRUE, install = FALSE, check = FALSE, 
-    check.opts = "--as-cran", remove.check = TRUE, reformat = TRUE, ...)
+roxygen_and_build(pkg, build = TRUE, build.opts = "--no-manual", install = FALSE, 
+    check = FALSE, check.opts = "--as-cran --no-manual", remove.check = TRUE, 
+    reformat = TRUE, ...)
 
-rab(pkg, roxygen.dir = pkg, build = TRUE, install = FALSE, check = FALSE, 
-    check.opts = "--as-cran", remove.check = TRUE, reformat = TRUE, ...)
+rab(pkg, build = TRUE, build.opts = "--no-manual", install = FALSE, check = FALSE, 
+    check.opts = "--as-cran --no-manual", remove.check = TRUE, reformat = TRUE, 
+    ...)
 }
 \arguments{
   \item{pkg}{the root directory of the source package}
 
-  \item{roxygen.dir}{the directory for the roxygenized
-  package (by default it is the same as \code{pkg})}
-
   \item{build}{whether to build the package}
+
+  \item{build.opts}{options to be passed to \command{R CMD
+  build}}
 
   \item{install}{whether to install the package}
 
@@ -34,14 +36,13 @@ rab(pkg, roxygen.dir = pkg, build = TRUE, install = FALSE, check = FALSE,
   \code{\link[roxygen2]{roxygenize}}}
 }
 \value{
-  \code{NULL}
+\code{NULL}
 }
 \description{
-  After the source package is roxygenized, this function
-  will build the package. Optionally it also installs or
-  checks the package, reformats the code in the usage and
-  examples sections. Note \code{\link{rab}} is an alias of
-  \code{\link{roxygen_and_build}}.
+After the source package is roxygenized, this function will build the
+package. Optionally it also installs or checks the package, reformats the
+code in the usage and examples sections. Note \code{\link{rab}} is an alias
+of \code{\link{roxygen_and_build}}.
 }
 \examples{
 \dontrun{
@@ -51,5 +52,5 @@ rab("Rd2roxygen", install = TRUE)
 }
 }
 \author{
-  Yihui Xie <\url{http://yihui.name}>
+Yihui Xie <\url{http://yihui.name}>
 }
