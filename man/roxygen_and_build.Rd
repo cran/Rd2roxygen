@@ -1,15 +1,18 @@
+% Please edit documentation in R/build.R
 \name{roxygen_and_build}
 \alias{rab}
 \alias{roxygen_and_build}
 \title{Roxygenize a package, clean up and build/check the package}
 \usage{
 roxygen_and_build(pkg, build = TRUE, build.opts = "--no-manual", install = FALSE, 
-    check = FALSE, check.opts = "--as-cran --no-manual", remove.check = TRUE, 
-    reformat = TRUE, ...)
-
-rab(pkg, build = TRUE, build.opts = "--no-manual", install = FALSE, check = FALSE, 
+    install.opts = if (build) "" else "--with-keep.source", check = FALSE, 
     check.opts = "--as-cran --no-manual", remove.check = TRUE, reformat = TRUE, 
-    ...)
+    before = NULL, ...)
+
+rab(pkg, build = TRUE, build.opts = "--no-manual", install = FALSE, 
+    install.opts = if (build) "" else "--with-keep.source", check = FALSE, 
+    check.opts = "--as-cran --no-manual", remove.check = TRUE, reformat = TRUE, 
+    before = NULL, ...)
 }
 \arguments{
 \item{pkg}{the root directory of the source package}
@@ -20,6 +23,8 @@ rab(pkg, build = TRUE, build.opts = "--no-manual", install = FALSE, check = FALS
 
 \item{install}{whether to install the package}
 
+\item{install.opts}{options to be passed to \command{R CMD INSTALL}}
+
 \item{check}{whether to check the package}
 
 \item{check.opts}{options to check the package (e.g. \code{"--no-examples"})}
@@ -29,6 +34,9 @@ CMD check}}
 
 \item{reformat}{whether to reformat the usage and examples code; see
 \code{\link{reformat_code}}}
+
+\item{before}{an R expression to be evaluated under the package root
+directory before the package is roxygenized and built}
 
 \item{...}{other arguments passed to \code{\link[roxygen2]{roxygenize}}}
 }

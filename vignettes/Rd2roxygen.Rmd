@@ -4,15 +4,13 @@ title: 'Rd2roxygen: Convert Rd to roxygen documentation and utilities to enhance
 author: "Yihui Xie^[RStudio, Inc. Email: xie@yihui.name]"
 date: '`r Sys.Date()`'
 output:
-  html_document:
-    css: Rd2roxygen.css
+  knitr:::html_vignette:
+    toc: yes
 bibliography: Rd2roxygen.bib
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Rd2roxygen: Convert Rd to roxygen documentation and utilities to enhance R documentation}
 ---
-
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{Rd2roxygen: Convert Rd to roxygen documentation and utilities to enhance R documentation}
--->
 
 ```{r setup, echo=FALSE}
 library('knitr')
@@ -77,8 +75,7 @@ cat(create_roxygen(info), sep='\n') # parse_and_save() combines these two steps
 This package also provides a tool `roxygen_and_build()` (or in short `rab()`)
 to help us build the package.
 
-```{r rab,echo=FALSE}
-formatR::usage(rab)
+```{r rab, eval=FALSE, code=formatR::usage(rab)}
 ```
 
 The main feature of `rab()` is the option to "reformat" the code in the

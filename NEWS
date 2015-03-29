@@ -1,3 +1,26 @@
+		  CHANGES IN Rd2roxygen VERSION 1.6
+
+NEW FEATURES
+
+  o `rab(install = TRUE)` can automatically generate an Rd file for objects that
+  are imported from other packages and later re-exported in the current package;
+  this is done through the internal function `importRd()`
+
+  o when `build = FALSE` and `install = TRUE` in `rab()`, the package directory
+  instead of the built tar ball is installed
+
+  o added an argument `install.opts` to `rab()` to specify options for `R CMD
+  INSTALL` (default: `--with-keep.source` if `build = FALSE`, otherwise empty)
+
+  o added an argument `before` to `rab()` so we can evaluate an R expression
+  before the package is roxygenized and built
+
+  o if the Examples section starts with a special token `# !formatR`, the
+  example code will not be reformatted
+
+  o spaces will be added after commas in \item{}, e.g. \item{x,y,z}{} will be
+  converted to \item{x, y, z}{}
+
 		  CHANGES IN Rd2roxygen VERSION 1.5
 
 MINOR CHANGES
