@@ -22,6 +22,7 @@
 #' @author Yihui Xie <\url{http://yihui.name}>
 #' @rdname roxygen_and_build
 #' @importFrom roxygen2 roxygenize
+#' @import utils
 #' @export
 #' @examples \dontrun{
 #' roxygen_and_build("Rd2roxygen", install = TRUE)
@@ -47,8 +48,12 @@ roxygen_and_build = function(
     for (f in rd.list) reformat_code(f)
   }
   desc = file.path(pkg, 'DESCRIPTION')
-  if (build) system(sprintf('%s CMD build %s %s', Rbin(), build.opts, pkg))
   pv = read.dcf(desc, fields = c('Package', 'Version'))
+  if (build) {
+    # delete existing tarballs
+    unlink(sprintf('%s_*.tar.gz', pv[1, 1]))
+    system(sprintf('%s CMD build %s %s', Rbin(), build.opts, pkg))
+  }
   res = sprintf('%s_%s.tar.gz', pv[1, 1], pv[1, 2])
   if (install) {
     if (!build) res = pkg
@@ -132,15 +137,6 @@ reformat_code = function(path, ...) {
       message('(!) failed to reformat usage code in ', path)
       message(paste('   ', tmp, collapse = '\n'))
     }
-  }
-  # add a space after the comma, i.e. turn \item{x, y}{} to \item{x, y, z}{}
-  if (length(idx <- grep('^\\\\item\\{[^}]+,[^}]+\\}\\{.+', rd))) {
-    txt = rd[idx]
-    r = '^(\\\\item\\{[^}]+\\})(\\{.+)$'
-    t1 = gsub(r, '\\1', txt)
-    t2 = gsub(r, '\\2', txt)
-    t1 = gsub(',', ', ', t1)
-    rd[idx] = paste(t1, t2, sep = '')
   }
   writeLines(strip_white(rd), path)
   flush.console()

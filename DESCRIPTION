@@ -1,8 +1,8 @@
 Package: Rd2roxygen
 Type: Package
 Title: Convert Rd to Roxygen Documentation
-Version: 1.6
-Date: 2015-03-29
+Version: 1.6.1
+Date: 2016-04-14
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Yihui", "Xie", email = "xie@yihui.name", role = c("aut", "cre"))
@@ -21,9 +21,10 @@ License: GPL
 URL: http://yihui.name/Rd2roxygen
 BugReports: https://github.com/yihui/Rd2roxygen/issues
 VignetteBuilder: knitr
-Packaged: 2015-03-29 04:22:21 UTC; yihui
+RoxygenNote: 5.0.1
+NeedsCompilation: no
+Packaged: 2016-04-14 21:07:50 UTC; yihui
 Author: Hadley Wickham [aut],
   Yihui Xie [aut, cre]
-NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2015-03-29 08:50:03
+Date/Publication: 2016-04-15 08:32:58
