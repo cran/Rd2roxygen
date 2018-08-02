@@ -21,7 +21,6 @@
 #' @return \code{NULL}
 #' @author Yihui Xie <\url{http://yihui.name}>
 #' @rdname roxygen_and_build
-#' @importFrom roxygen2 roxygenize
 #' @import utils
 #' @export
 #' @examples \dontrun{
@@ -39,7 +38,14 @@ roxygen_and_build = function(
   if (missing(pkg)) pkg = head(commandArgs(TRUE), 1)
   if (length(pkg) != 1) stop('The package directory must be one character string')
   in_dir(pkg, before)
-  roxygenize(pkg, ...)
+  roxygen2::roxygenize(pkg, ...)
+  desc = file.path(pkg, 'DESCRIPTION')
+  pv = read.dcf(desc, fields = c('Package', 'Version'))
+  # undo roxygen2's hack https://github.com/klutometis/roxygen/issues/568
+  # because it affects importRd()
+  for (name in intersect(c('devtools_shims', paste0('package:', pv[1, 1])), search())) {
+    detach(name, unload = TRUE, character.only = TRUE)
+  }
   if (reformat) {
     message('Reformatting usage and examples')
     rd.list = list.files(
@@ -47,8 +53,6 @@ roxygen_and_build = function(
     )
     for (f in rd.list) reformat_code(f)
   }
-  desc = file.path(pkg, 'DESCRIPTION')
-  pv = read.dcf(desc, fields = c('Package', 'Version'))
   # delete existing tarballs
   unlink(sprintf('%s_*.tar.gz', pv[1, 1]))
   if (build) {
