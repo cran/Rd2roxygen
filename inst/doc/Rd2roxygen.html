@@ -12,17 +12,17 @@
 
 <meta name="author" content="Yihui Xie" />
 
-<meta name="date" content="2018-08-02" />
+<meta name="date" content="2019-03-05" />
 
 <title>Rd2roxygen</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -35,13 +35,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -84,8 +82,28 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 
-
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -319,7 +337,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Rd2roxygen</h1>
 <h3 class="subtitle"><em>Convert Rd to roxygen documentation</em></h3>
 <h4 class="author"><em>Yihui Xie</em></h4>
-<h4 class="date"><em>2018-08-02</em></h4>
+<h4 class="date"><em>2019-03-05</em></h4>
 
 
 <div id="TOC">
@@ -332,7 +350,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 
 <p>The package <a href="https://github.com/yihui/Rd2roxygen"><strong>Rd2roxygen</strong></a> helps R package developers who used to write R documentation in the raw LaTeX-like commands but now want to switch their documentation to <a href="https://cran.r-project.org/package=roxygen2"><strong>roxygen2</strong></a>, which is a convenient tool for developers, since we can write documentation as inline comments, e.g.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">## the source code of the function `parse_and_save`</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">## the source code of the function `parse_and_save`</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">ex.file =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;parse_and_save.R&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Rd2roxygen&quot;</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">cat</span>(<span class="kw">readLines</span>(ex.file), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>#' Parse the input Rd file and save the roxygen documentation into a file.
@@ -369,26 +387,24 @@ into a file}
 <h1>Convert a whole package</h1>
 <p>The function <code>Rd2roxygen::Rd2roxygen()</code> can take a path of a source package, parse all the Rd files under the <code>man</code> directory, and write the roxygen comments right above the source code of the functions under the <code>R</code> directory. See <code>?Rd2roxygen</code> for an example.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">Rd2roxygen<span class="op">::</span><span class="kw">Rd2roxygen</span>(<span class="st">&quot;path/to/source/pkg&quot;</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">## there must be 'man' and 'R' directories under this path</a></code></pre></div>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">## there must be 'man' and 'R' directories under this path</span></a></code></pre></div>
 <p>Note the path to the package should not be <code>.</code>. You are recommended to call this function in the directory that contains the source package.</p>
 </div>
 <div id="parse-a-single-rd-file" class="section level1">
 <h1>Parse a single Rd file</h1>
 <p>We can parse a single Rd file and create the roxygen comments as well with <code>parse_file()</code> and <code>create_roxygen()</code>, e.g.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(Rd2roxygen)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">## we can specify the roxygen comments prefix (#' by default)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">## we can specify the roxygen comments prefix (#' by default)</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">options</span>(<span class="dt">roxygen.comment =</span> <span class="st">&quot;##' &quot;</span>)</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">str</span>(info &lt;-<span class="st"> </span><span class="kw">parse_file</span>(rd.file))</a></code></pre></div>
-<pre><code>List of 9
- $ title   : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
- $ usage   : chr &quot;parse_and_save(path, file, usage=FALSE)&quot;
- $ desc    : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
- $ section : chr(0) 
- $ value   : chr &quot;a character vector if \\code{file} is not specified, or write the vector\ninto a file&quot;
- $ author  : chr &quot;Hadley Wickham; modified by Yihui Xie &lt;\\url{http://yihui.name}&gt;&quot;
- $ name    : chr &quot;parse_and_save&quot;
- $ keywords: list()
- $ params  : chr [1:3] &quot;path the path of the Rd file&quot; &quot;file the path to save the roxygen documentation&quot; &quot;usage logical: whether to include the usage section in the output&quot;</code></pre>
+<pre><code>List of 7
+ $ title : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
+ $ usage : chr &quot;parse_and_save(path, file, usage=FALSE)&quot;
+ $ desc  : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
+ $ value : chr &quot;a character vector if \\code{file} is not specified, or write the vector\ninto a file&quot;
+ $ author: chr &quot;Hadley Wickham; modified by Yihui Xie &lt;\\url{http://yihui.name}&gt;&quot;
+ $ name  : chr &quot;parse_and_save&quot;
+ $ params: chr [1:3] &quot;path the path of the Rd file&quot; &quot;file the path to save the roxygen documentation&quot; &quot;usage logical: whether to include the usage section in the output&quot;</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># parse_and_save() combines these two steps</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">cat</span>(<span class="kw">create_roxygen</span>(info), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>##' Parse the input Rd file and save the roxygen documentation into a file.
@@ -411,10 +427,10 @@ into a file}
 <a class="sourceLine" id="cb10-3" data-line-number="3">    <span class="dt">check.opts =</span> <span class="st">&quot;--as-cran --no-manual&quot;</span>, <span class="dt">remove.check =</span> <span class="ot">TRUE</span>, </a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">    <span class="dt">reformat =</span> <span class="ot">TRUE</span>, <span class="dt">before =</span> <span class="ot">NULL</span>, ...)</a></code></pre></div>
 <p>The main feature of <code>rab()</code> is the option to “reformat” the code in the usage and example sections. If we specify <code>reformat = TRUE</code> in <code>rab()</code>, the code will be reformated like this:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">## original code</a>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">## original code</span></a>
 <a class="sourceLine" id="cb11-2" data-line-number="2">rab=<span class="cf">function</span>(pkg,<span class="dt">build=</span><span class="ot">TRUE</span>,<span class="dt">install=</span><span class="ot">FALSE</span>,</a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="dt">check=</span><span class="ot">FALSE</span>,<span class="dt">check.opts=</span><span class="st">''</span>,<span class="dt">remove.check=</span><span class="ot">TRUE</span>,<span class="dt">reformat=</span><span class="ot">TRUE</span>,...){}</a></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">## the reformatted code; note the spaces and indent</a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">## the reformatted code; note the spaces and indent</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">rab =<span class="st"> </span><span class="cf">function</span>(pkg, <span class="dt">build =</span> <span class="ot">TRUE</span>, <span class="dt">install =</span> <span class="ot">FALSE</span>, <span class="dt">check =</span> <span class="ot">FALSE</span>, </a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">    <span class="dt">check.opts =</span> <span class="st">&quot;&quot;</span>, <span class="dt">remove.check =</span> <span class="ot">TRUE</span>, <span class="dt">reformat =</span> <span class="ot">TRUE</span>, ...) {</a>
 <a class="sourceLine" id="cb12-4" data-line-number="4">}</a></code></pre></div>
