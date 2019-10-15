@@ -1,15 +1,15 @@
-c4e55fef71be9e5a322a9c924ab0a44e *DESCRIPTION
+2a26cc5d61db4b53e6960d8845999e09 *DESCRIPTION
 ddfb3364fa45f7f9c0f93ba5d432e0b6 *NAMESPACE
-f7c2a32f31f4650ea86be677ca5304ed *NEWS
+98b622a5c366eb5e469ccf0fb68b1370 *NEWS
 8443b90d8c793ce06f54a6813f9a7d2f *R/Rd2roxygen-package.R
-3edb66bbb97734f8292f0f36d12ca7be *R/build.R
+5ff5ef0a6ab97deb413270d45eb6bc9c *R/build.R
 7b770307ae29cb4f7d9167fa424adebe *R/rd2roxygen.R
 9a9d8971ac096267b94b92b8d7639ce4 *R/utils.R
 bd68504e6b4063a4ef441a98dd369598 *README.md
-201cd80fe26f998aed5f45e2c12766ea *build/vignette.rds
+36e4121e3e384a6e8e3c3d41adbb03f8 *build/vignette.rds
 959ed96f6ff61a5848c3667a76f6213b *inst/doc/Rd2roxygen.R
 7802037f7ac16443efb2df24ee963550 *inst/doc/Rd2roxygen.Rmd
-d3efe3a1313c7800e7b134c63d10c0c0 *inst/doc/Rd2roxygen.html
+b61adba927de820a01e62a5e884f9779 *inst/doc/Rd2roxygen.html
 ff6eba778710cc4d5e229afb1d25f914 *inst/examples/parse_and_save.R
 f735be75e3976a4a3b06477e9084608a *inst/examples/parse_and_save.Rd
 48dc479fca1e483a50bfa619cb8dcda0 *inst/examples/pkgDemo/DESCRIPTION
@@ -25,5 +25,5 @@ f5716e312d4c100dc35ead1f2698ecc3 *man/create_roxygen.Rd
 cc2432bd306f36fdee72c9ba1f4030d0 *man/parse_and_save.Rd
 7d7bb90bdf29bf7bd6795292e8c15c8c *man/parse_file.Rd
 c3e2de8c23160a29878c2eef39ded72f *man/reformat_code.Rd
-6560a3ca441fd55154dcbc55bf32fe9a *man/roxygen_and_build.Rd
+ba2a6a150f28335d663bf36281725563 *man/roxygen_and_build.Rd
 7802037f7ac16443efb2df24ee963550 *vignettes/Rd2roxygen.Rmd
