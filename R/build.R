@@ -19,7 +19,7 @@
 #'   directory before the package is roxygenized and built
 #' @param ... other arguments passed to \code{\link[roxygen2]{roxygenize}}
 #' @return \code{NULL}
-#' @author Yihui Xie <\url{http://yihui.name}>
+#' @author Yihui Xie <\url{http://yihui.org}>
 #' @rdname roxygen_and_build
 #' @import utils
 #' @export
@@ -34,18 +34,12 @@ roxygen_and_build = function(
   check = FALSE, check.opts = '--as-cran --no-manual', remove.check = TRUE,
   reformat = TRUE, before = NULL, ...
 ) {
-  do.call(library, list('methods'))
   if (missing(pkg)) pkg = head(commandArgs(TRUE), 1)
   if (length(pkg) != 1) stop('The package directory must be one character string')
   in_dir(pkg, before)
-  roxygen2::roxygenize(pkg, ...)
+  xfun::Rscript_call('roxygen2::roxygenize', list(pkg, ...))
   desc = file.path(pkg, 'DESCRIPTION')
   pv = read.dcf(desc, fields = c('Package', 'Version'))
-  # undo roxygen2's hack https://github.com/klutometis/roxygen/issues/568
-  # because it affects importRd()
-  for (name in intersect(c('devtools_shims', paste0('package:', pv[1, 1])), search())) {
-    detach(name, unload = TRUE, character.only = TRUE)
-  }
   if (reformat) {
     message('Reformatting examples')
     rd.list = list.files(
@@ -86,7 +80,7 @@ rab = roxygen_and_build
 #' @param ... other arguments passed to \code{tidy_source}
 #' @return \code{NULL}; as a side effect, the original Rd file will be updated
 #' @export
-#' @author Yihui Xie <\url{http://yihui.name}>
+#' @author Yihui Xie <\url{http://yihui.org}>
 #' @seealso \code{\link[formatR]{tidy_source}}
 #' @note If the usage or examples code is not syntactically correct, it will not
 #'   be reformatted and a message will be printed on screen. One possible

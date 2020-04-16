@@ -1,13 +1,13 @@
 Package: Rd2roxygen
 Type: Package
 Title: Convert Rd to 'Roxygen' Documentation
-Version: 1.9
+Version: 1.10
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
     person()
     )
-Imports: roxygen2 (>= 4.0.0), formatR (>= 1.0)
+Imports: roxygen2 (>= 4.0.0), xfun (>= 0.13), formatR (>= 1.0)
 Suggests: knitr (>= 1.9), rmarkdown
 Description: Functions to convert Rd to 'roxygen' documentation. It can parse an
     Rd file to a list, create the 'roxygen' documentation and update the original
@@ -20,12 +20,12 @@ License: GPL
 URL: https://github.com/yihui/Rd2roxygen
 BugReports: https://github.com/yihui/Rd2roxygen/issues
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2019-10-15 19:45:27 UTC; yihui
+Packaged: 2020-04-16 02:20:06 UTC; yihui
 Author: Hadley Wickham [aut],
   Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>)
 Maintainer: Yihui Xie <xie@yihui.name>
 Repository: CRAN
-Date/Publication: 2019-10-15 20:20:02 UTC
+Date/Publication: 2020-04-16 04:40:07 UTC

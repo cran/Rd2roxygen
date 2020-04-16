@@ -1,46 +1,59 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Yihui Xie" />
 
-<meta name="date" content="2019-10-15" />
+<meta name="date" content="2020-04-15" />
 
 <title>Rd2roxygen</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -49,9 +62,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -341,7 +354,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Rd2roxygen</h1>
 <h3 class="subtitle">Convert Rd to roxygen documentation</h3>
 <h4 class="author">Yihui Xie</h4>
-<h4 class="date">2019-10-15</h4>
+<h4 class="date">2020-04-15</h4>
 
 
 <div id="TOC">
@@ -354,18 +367,18 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 
 <p>The package <a href="https://github.com/yihui/Rd2roxygen"><strong>Rd2roxygen</strong></a> helps R package developers who used to write R documentation in the raw LaTeX-like commands but now want to switch their documentation to <a href="https://cran.r-project.org/package=roxygen2"><strong>roxygen2</strong></a>, which is a convenient tool for developers, since we can write documentation as inline comments, e.g.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">## the source code of the function `parse_and_save`</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">ex.file =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;parse_and_save.R&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Rd2roxygen&quot;</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">cat</span>(<span class="kw">readLines</span>(ex.file), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
-<pre><code>#' Parse the input Rd file and save the roxygen documentation into a file.
-#'
-#' @param path the path of the Rd file
-#' @param file the path to save the roxygen documentation
-#' @param usage logical: whether to include the usage section in the output
-#' @return a character vector if \code{file} is not specified, or write the
-#'   vector into a file
-#' @export
-#' @author Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.name}&gt;
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">## the source code of the function `parse_and_save`</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>ex.file =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&#39;examples&#39;</span>, <span class="st">&#39;parse_and_save.R&#39;</span>, <span class="dt">package =</span> <span class="st">&#39;Rd2roxygen&#39;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">cat</span>(<span class="kw">readLines</span>(ex.file), <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>#&#39; Parse the input Rd file and save the roxygen documentation into a file.
+#&#39;
+#&#39; @param path the path of the Rd file
+#&#39; @param file the path to save the roxygen documentation
+#&#39; @param usage logical: whether to include the usage section in the output
+#&#39; @return a character vector if \code{file} is not specified, or write the
+#&#39;   vector into a file
+#&#39; @export
+#&#39; @author Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.org}&gt;
 parse_and_save &lt;- function(path, file, usage = FALSE) {
   parsed &lt;- parse_file(path)
   output &lt;- create_roxygen(parsed, usage = usage)
@@ -373,8 +386,8 @@ parse_and_save &lt;- function(path, file, usage = FALSE) {
     cat(paste(output, collapse = &quot;\n&quot;), file = file)
 }</code></pre>
 <p>With <strong>roxygen2</strong> (typically using <code>roxygenize()</code>), we can create the real Rd file from the above source code like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">rd.file =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;parse_and_save.Rd&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Rd2roxygen&quot;</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">cat</span>(<span class="kw">readLines</span>(rd.file), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>rd.file =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&#39;examples&#39;</span>, <span class="st">&#39;parse_and_save.Rd&#39;</span>, <span class="dt">package =</span> <span class="st">&#39;Rd2roxygen&#39;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">cat</span>(<span class="kw">readLines</span>(rd.file), <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
 <pre><code>\name{parse_and_save}
 \alias{parse_and_save}
 \title{Parse the input Rd file and save the roxygen documentation into a file.}
@@ -382,7 +395,7 @@ parse_and_save &lt;- function(path, file, usage = FALSE) {
 \description{Parse the input Rd file and save the roxygen documentation into a file.}
 \value{a character vector if \code{file} is not specified, or write the vector
 into a file}
-\author{Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.name}&gt;}
+\author{Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.org}&gt;}
 \arguments{\item{path}{the path of the Rd file}
 \item{file}{the path to save the roxygen documentation}
 \item{usage}{logical: whether to include the usage section in the output}}</code></pre>
@@ -390,60 +403,62 @@ into a file}
 <div id="convert-a-whole-package" class="section level1">
 <h1>Convert a whole package</h1>
 <p>The function <code>Rd2roxygen::Rd2roxygen()</code> can take a path of a source package, parse all the Rd files under the <code>man</code> directory, and write the roxygen comments right above the source code of the functions under the <code>R</code> directory. See <code>?Rd2roxygen</code> for an example.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">Rd2roxygen<span class="op">::</span><span class="kw">Rd2roxygen</span>(<span class="st">&quot;path/to/source/pkg&quot;</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">## there must be 'man' and 'R' directories under this path</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>Rd2roxygen<span class="op">::</span><span class="kw">Rd2roxygen</span>(<span class="st">&#39;path/to/source/pkg&#39;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">## there must be &#39;man&#39; and &#39;R&#39; directories under this path</span></span></code></pre></div>
 <p>Note the path to the package should not be <code>.</code>. You are recommended to call this function in the directory that contains the source package.</p>
 </div>
 <div id="parse-a-single-rd-file" class="section level1">
 <h1>Parse a single Rd file</h1>
 <p>We can parse a single Rd file and create the roxygen comments as well with <code>parse_file()</code> and <code>create_roxygen()</code>, e.g.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(Rd2roxygen)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">## we can specify the roxygen comments prefix (#' by default)</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">options</span>(<span class="dt">roxygen.comment =</span> <span class="st">&quot;##' &quot;</span>)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">str</span>(info &lt;-<span class="st"> </span><span class="kw">parse_file</span>(rd.file))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">library</span>(Rd2roxygen)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">## we can specify the roxygen comments prefix (#&#39; by default)</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">options</span>(<span class="dt">roxygen.comment =</span> <span class="st">&quot;##&#39; &quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="kw">str</span>(info &lt;-<span class="st"> </span><span class="kw">parse_file</span>(rd.file))</span></code></pre></div>
 <pre><code>List of 7
  $ title : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
  $ usage : chr &quot;parse_and_save(path, file, usage=FALSE)&quot;
  $ desc  : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
  $ value : chr &quot;a character vector if \\code{file} is not specified, or write the vector\ninto a file&quot;
- $ author: chr &quot;Hadley Wickham; modified by Yihui Xie &lt;\\url{http://yihui.name}&gt;&quot;
+ $ author: chr &quot;Hadley Wickham; modified by Yihui Xie &lt;\\url{http://yihui.org}&gt;&quot;
  $ name  : chr &quot;parse_and_save&quot;
  $ params: chr [1:3] &quot;path the path of the Rd file&quot; &quot;file the path to save the roxygen documentation&quot; &quot;usage logical: whether to include the usage section in the output&quot;</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># parse_and_save() combines these two steps</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">cat</span>(<span class="kw">create_roxygen</span>(info), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
-<pre><code>##' Parse the input Rd file and save the roxygen documentation into a file.
-##' 
-##' Parse the input Rd file and save the roxygen documentation into a file.
-##' 
-##' 
-##' @param path the path of the Rd file
-##' @param file the path to save the roxygen documentation
-##' @param usage logical: whether to include the usage section in the output
-##' @return a character vector if \code{file} is not specified, or write the
-##' vector into a file
-##' @author Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.name}&gt;</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># parse_and_save() combines these two steps</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">cat</span>(<span class="kw">create_roxygen</span>(info), <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>##&#39; Parse the input Rd file and save the roxygen documentation into a file.
+##&#39; 
+##&#39; Parse the input Rd file and save the roxygen documentation into a file.
+##&#39; 
+##&#39; 
+##&#39; @param path the path of the Rd file
+##&#39; @param file the path to save the roxygen documentation
+##&#39; @param usage logical: whether to include the usage section in the output
+##&#39; @return a character vector if \code{file} is not specified, or write the
+##&#39; vector into a file
+##&#39; @author Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.org}&gt;</code></pre>
 </div>
 <div id="roxygenize-and-build-a-package" class="section level1">
 <h1>Roxygenize and build a package</h1>
 <p>This package also provides a tool <code>roxygen_and_build()</code> (or in short <code>rab()</code>) to help us build the package.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">rab</span>(pkg, <span class="dt">build =</span> <span class="ot">TRUE</span>, <span class="dt">build.opts =</span> <span class="st">&quot;--no-manual&quot;</span>, <span class="dt">install =</span> <span class="ot">FALSE</span>, </a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">    <span class="dt">install.opts =</span> <span class="cf">if</span> (build) <span class="st">&quot;&quot;</span> <span class="cf">else</span> <span class="st">&quot;--with-keep.source&quot;</span>, <span class="dt">check =</span> <span class="ot">FALSE</span>, </a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">    <span class="dt">check.opts =</span> <span class="st">&quot;--as-cran --no-manual&quot;</span>, <span class="dt">remove.check =</span> <span class="ot">TRUE</span>, </a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">    <span class="dt">reformat =</span> <span class="ot">TRUE</span>, <span class="dt">before =</span> <span class="ot">NULL</span>, ...)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">rab</span>(pkg, <span class="dt">build =</span> <span class="ot">TRUE</span>, <span class="dt">build.opts =</span> <span class="st">&quot;--no-manual&quot;</span>,</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="dt">install =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    <span class="dt">install.opts =</span> <span class="cf">if</span> (build) <span class="st">&quot;&quot;</span> <span class="cf">else</span> <span class="st">&quot;--with-keep.source&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>    <span class="dt">check =</span> <span class="ot">FALSE</span>, <span class="dt">check.opts =</span> <span class="st">&quot;--as-cran --no-manual&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5"></a>    <span class="dt">remove.check =</span> <span class="ot">TRUE</span>, <span class="dt">reformat =</span> <span class="ot">TRUE</span>, <span class="dt">before =</span> <span class="ot">NULL</span>,</span>
+<span id="cb10-6"><a href="#cb10-6"></a>    ...)</span></code></pre></div>
 <p>The main feature of <code>rab()</code> is the option to “reformat” the code in the usage and example sections. If we specify <code>reformat = TRUE</code> in <code>rab()</code>, the code will be reformated like this:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">## original code</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">rab=<span class="cf">function</span>(pkg,<span class="dt">build=</span><span class="ot">TRUE</span>,<span class="dt">install=</span><span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="dt">check=</span><span class="ot">FALSE</span>,<span class="dt">check.opts=</span><span class="st">''</span>,<span class="dt">remove.check=</span><span class="ot">TRUE</span>,<span class="dt">reformat=</span><span class="ot">TRUE</span>,...){}</a></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">## the reformatted code; note the spaces and indent</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">rab =<span class="st"> </span><span class="cf">function</span>(pkg, <span class="dt">build =</span> <span class="ot">TRUE</span>, <span class="dt">install =</span> <span class="ot">FALSE</span>, <span class="dt">check =</span> <span class="ot">FALSE</span>, </a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">    <span class="dt">check.opts =</span> <span class="st">&quot;&quot;</span>, <span class="dt">remove.check =</span> <span class="ot">TRUE</span>, <span class="dt">reformat =</span> <span class="ot">TRUE</span>, ...) {</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">}</a></code></pre></div>
-<p>Note this functionality depends on the package <a href="https://yihui.name/formatR"><strong>formatR</strong></a>, and sometimes it might not be possible to reformat the code, e.g. the <code>\dontrun{}</code> command in Rd can contain arbitrary texts, which means there could be illegal R expressions and <strong>formatR</strong> will be unable to format the code. In this case, the original code will not be reformatted and a message will be printed on screen.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">## original code</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>rab=<span class="cf">function</span>(pkg,<span class="dt">build=</span><span class="ot">TRUE</span>,<span class="dt">install=</span><span class="ot">FALSE</span>,</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="dt">check=</span><span class="ot">FALSE</span>,<span class="dt">check.opts=</span><span class="st">&#39;&#39;</span>,<span class="dt">remove.check=</span><span class="ot">TRUE</span>,<span class="dt">reformat=</span><span class="ot">TRUE</span>,...){}</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co">## the reformatted code; note the spaces and indent</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>rab =<span class="st"> </span><span class="cf">function</span>(pkg, <span class="dt">build =</span> <span class="ot">TRUE</span>, <span class="dt">install =</span> <span class="ot">FALSE</span>, <span class="dt">check =</span> <span class="ot">FALSE</span>, </span>
+<span id="cb12-3"><a href="#cb12-3"></a>    <span class="dt">check.opts =</span> <span class="st">&quot;&quot;</span>, <span class="dt">remove.check =</span> <span class="ot">TRUE</span>, <span class="dt">reformat =</span> <span class="ot">TRUE</span>, ...) {</span>
+<span id="cb12-4"><a href="#cb12-4"></a>}</span></code></pre></div>
+<p>Note this functionality depends on the package <a href="https://yihui.org/formatR"><strong>formatR</strong></a>, and sometimes it might not be possible to reformat the code, e.g. the <code>\dontrun{}</code> command in Rd can contain arbitrary texts, which means there could be illegal R expressions and <strong>formatR</strong> will be unable to format the code. In this case, the original code will not be reformatted and a message will be printed on screen.</p>
 </div>
 <div id="about-this-vignette" class="section level1">
 <h1>About this vignette</h1>
-<p>This vignette was built using the vignette engine <code>knitr::rmarkdown</code> in the <a href="https://yihui.name/knitr"><strong>knitr</strong></a> package. You can find the source in the <a href="https://github.com/yihui/Rd2roxygen/tree/master/vignettes">Rd2roxygen repository</a> on Github, or</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">system.file</span>(<span class="st">&quot;doc&quot;</span>, <span class="st">&quot;Rd2roxygen.Rmd&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;Rd2roxygen&quot;</span>)</a></code></pre></div>
+<p>This vignette was built using the vignette engine <code>knitr::rmarkdown</code> in the <a href="https://yihui.org/knitr"><strong>knitr</strong></a> package. You can find the source in the <a href="https://github.com/yihui/Rd2roxygen/tree/master/vignettes">Rd2roxygen repository</a> on Github, or</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">system.file</span>(<span class="st">&#39;doc&#39;</span>, <span class="st">&#39;Rd2roxygen.Rmd&#39;</span>, <span class="dt">package=</span><span class="st">&#39;Rd2roxygen&#39;</span>)</span></code></pre></div>
 </div>
 
 <script type="text/javascript">
