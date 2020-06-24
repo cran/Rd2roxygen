@@ -36,7 +36,7 @@ roxygen_and_build = function(
 ) {
   if (missing(pkg)) pkg = head(commandArgs(TRUE), 1)
   if (length(pkg) != 1) stop('The package directory must be one character string')
-  in_dir(pkg, before)
+  xfun::in_dir(pkg, before)
   xfun::Rscript_call('roxygen2::roxygenize', list(pkg, ...))
   desc = file.path(pkg, 'DESCRIPTION')
   pv = read.dcf(desc, fields = c('Package', 'Version'))
@@ -161,10 +161,11 @@ importRd = function(path, package) {
     if (is.null(pkg) || pkg == package || !(pkg %in% pkgs)) return()
     # if name is not exported there, you have to document it by yourself
     if (!(name %in% getNamespaceExports(pkg))) return()
+    topic = basename(do.call(help, list(name, pkg))[[1]])
     name = as.character(escape(name))
     c(
       package = pkg, name = name,
-      link = sprintf('\\code{\\link[%s:%s]{%s}}', pkg, name, name)
+      link = sprintf('\\code{\\link[%s:%s]{%s}}', pkg, topic, name)
     )
   })
   link = do.call(rbind, link)
