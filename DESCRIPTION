@@ -1,7 +1,7 @@
 Package: Rd2roxygen
 Type: Package
 Title: Convert Rd to 'Roxygen' Documentation
-Version: 1.12
+Version: 1.13
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
@@ -23,9 +23,9 @@ VignetteBuilder: knitr
 RoxygenNote: 7.1.2
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2021-10-19 03:29:32 UTC; yihui
+Packaged: 2022-03-02 20:28:05 UTC; yihui
 Author: Hadley Wickham [aut],
   Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>)
 Maintainer: Yihui Xie <xie@yihui.name>
 Repository: CRAN
-Date/Publication: 2021-10-19 05:30:12 UTC
+Date/Publication: 2022-03-02 21:00:02 UTC
