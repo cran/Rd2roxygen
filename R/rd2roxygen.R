@@ -5,7 +5,7 @@
 #' @param path the path of the Rd file
 #' @return a named list containing the documentation sections as strings
 #' @export
-#' @author Hadley Wickham; modified by Yihui Xie <\url{http://yihui.org}>
+#' @author Hadley Wickham; modified by Yihui Xie <\url{https://yihui.org}>
 #' @examples
 #' rd.file = system.file('examples', 'parse_and_save.Rd', package='Rd2roxygen')
 #' parse_file(rd.file)
@@ -47,7 +47,7 @@ parse_file = function(path) {
   if (identical(out$aliases, out$name)) {
     out$aliases = NULL
   }
-  out$keywords = unlist(lapply(rd[names(rd) == "keyword"], "[[", 1))
+  out$keywords = unlist(lapply(rd[names(rd) == "keyword"], head, 1))
 
   # Pull apart arguments
   arguments = rd$arguments
