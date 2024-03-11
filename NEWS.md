@@ -1,3 +1,7 @@
+# CHANGES IN Rd2roxygen VERSION 1.15
+
+- Conversion fails if function name contains a regex metacharacter (thanks, @joshuaulrich, #32).
+
 # CHANGES IN Rd2roxygen VERSION 1.14
 
 - Fixed a `parse_file()` error that can occur when `\keywords{}` is empty in `.Rd` (thanks, @byandell, #29).

@@ -1,7 +1,7 @@
 Package: Rd2roxygen
 Type: Package
 Title: Convert Rd to 'Roxygen' Documentation
-Version: 1.14
+Version: 1.15
 Authors@R: c(
     person("Hadley", "Wickham", role = "aut"),
     person("Yihui", "Xie", role = c("aut", "cre"), email = "xie@yihui.name", comment = c(ORCID = "0000-0003-0645-5666")),
@@ -20,12 +20,12 @@ License: GPL
 URL: https://github.com/yihui/Rd2roxygen
 BugReports: https://github.com/yihui/Rd2roxygen/issues
 VignetteBuilder: knitr
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2022-08-09 20:36:13 UTC; yihui
+Packaged: 2024-03-11 21:18:49 UTC; yihui
 Author: Hadley Wickham [aut],
   Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>)
 Maintainer: Yihui Xie <xie@yihui.name>
 Repository: CRAN
-Date/Publication: 2022-08-09 20:50:03 UTC
+Date/Publication: 2024-03-11 21:30:02 UTC

@@ -1,420 +1,57 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-<meta name="author" content="Yihui Xie" />
-
-<meta name="date" content="2022-08-09" />
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Rd2roxygen</title>
-
-<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
-// be compatible with the behavior of Pandoc < 2.8).
-document.addEventListener('DOMContentLoaded', function(e) {
-  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
-  var i, h, a;
-  for (i = 0; i < hs.length; i++) {
-    h = hs[i];
-    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
-    a = h.attributes;
-    while (a.length > 0) h.removeAttribute(a[0].name);
-  }
-});
-</script>
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-
-
-<style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
-</style>
-<style type="text/css" data-origin="pandoc">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
-  }
-})();
-</script>
-
-
-
-
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 800px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 20px;
-}
-#header {
-text-align: center;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 0;
-padding: 4px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table:not([class]) {
-margin: auto;
-min-width: 40%;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table[summary="R argblock"] {
-width: 100%;
-border: none;
-}
-table:not([class]) th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table:not([class]) td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table:not([class]), table:not([class]) th, table:not([class]) td {
-border-left-style: none;
-border-right-style: none;
-}
-table:not([class]) tr.odd {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 13px;
-padding-bottom: 1px;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f5f5f5;
-border-radius: 3px;
-color: #333;
-}
-pre {
-overflow-x: auto;
-border-radius: 3px;
-margin: 5px 0 10px 0;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: white;
-border: #f5f5f5 1px solid;
-}
-pre:not([class]) code {
-color: #444;
-background-color: white;
-}
-code {
-font-family: monospace;
-font-size: 90%;
-}
-p > code, li > code {
-padding: 2px 4px;
-color: #d14;
-border: 1px solid #e1e1e8;
-white-space: inherit;
-}
-div.figure {
-text-align: center;
-}
-table > caption, div.figure p.caption {
-font-style: italic;
-}
-table > caption span, div.figure p.caption span {
-font-style: normal;
-font-weight: bold;
-}
-p {
-margin: 0 0 10px;
-}
-table:not([class]) {
-margin: auto auto 10px auto;
-}
-img:not([class]) {
-background-color: #FFFFFF;
-padding: 2px;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-max-width: 100%;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f5f5f5;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f5f5f5;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f5f5f5;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
-div.r-help-page {
-background-color: #f9f9f9;
-border-bottom: #ddd 1px solid;
-margin-bottom: 10px;
-padding: 10px;
-}
-div.r-help-page:hover {
-background-color: #f4f4f4;
-}
-
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; } 
-code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
-
-
-
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rstudio/markdown/inst/resources/default.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rstudio/markdown/inst/resources/prism-xcode.css">
 </head>
-
 <body>
-
-
-
-
-<h1 class="title toc-ignore">Rd2roxygen</h1>
-<h3 class="subtitle">Convert Rd to roxygen documentation</h3>
-<h4 class="author">Yihui Xie</h4>
-<h4 class="date">2022-08-09</h4>
-
-
+<div class="frontmatter">
+<div class="title"><h1>Rd2roxygen</h1></div>
+<div class="author"><h2>Yihui Xie</h2></div>
+<div class="date"><h3>2024-03-11</h3></div>
+</div>
+<div class="body">
 <div id="TOC">
 <ul>
-<li><a href="#convert-a-whole-package" id="toc-convert-a-whole-package">Convert a whole package</a></li>
-<li><a href="#parse-a-single-rd-file" id="toc-parse-a-single-rd-file">Parse a single Rd file</a></li>
-<li><a href="#roxygenize-and-build-a-package" id="toc-roxygenize-and-build-a-package">Roxygenize and build a
-package</a></li>
-<li><a href="#about-this-vignette" id="toc-about-this-vignette">About
-this vignette</a></li>
+<li><a href="#convert-a-whole-package">Convert a whole package</a></li>
+<li><a href="#parse-a-single-rd-file">Parse a single Rd file</a></li>
+<li><a href="#roxygenize-and-build-a-package">Roxygenize and build a package</a></li>
+<li><a href="#about-this-vignette">About this vignette</a></li>
 </ul>
 </div>
-
-<p>The package <a href="https://github.com/yihui/Rd2roxygen"><strong>Rd2roxygen</strong></a>
-helps R package developers who used to write R documentation in the raw
-LaTeX-like commands but now want to switch their documentation to <a href="https://cran.r-project.org/package=roxygen2"><strong>roxygen2</strong></a>,
-which is a convenient tool for developers, since we can write
-documentation as inline comments, e.g.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## the source code of the function `parse_and_save`</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ex.file <span class="ot">=</span> <span class="fu">system.file</span>(<span class="st">&#39;examples&#39;</span>, <span class="st">&#39;parse_and_save.R&#39;</span>, <span class="at">package =</span> <span class="st">&#39;Rd2roxygen&#39;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(ex.file), <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
-<pre><code>#&#39; Parse the input Rd file and save the roxygen documentation into a file.
-#&#39;
-#&#39; @param path the path of the Rd file
-#&#39; @param file the path to save the roxygen documentation
-#&#39; @param usage logical: whether to include the usage section in the output
-#&#39; @return a character vector if \code{file} is not specified, or write the
-#&#39;   vector into a file
-#&#39; @export
-#&#39; @author Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.org}&gt;
+<p>The package <a href="https://github.com/yihui/Rd2roxygen"><strong>Rd2roxygen</strong></a> helps R package developers who
+used to write R documentation in the raw LaTeX-like commands but now want to
+switch their documentation to <a href="https://cran.r-project.org/package=roxygen2"><strong>roxygen2</strong></a>, which is a
+convenient tool for developers, since we can write documentation as inline
+comments, e.g.</p>
+<pre><code class="language-r">## the source code of the function `parse_and_save`
+ex.file = system.file('examples', 'parse_and_save.R', package = 'Rd2roxygen')
+cat(readLines(ex.file), sep = '\n')
+</code></pre>
+<pre><code>#' Parse the input Rd file and save the roxygen documentation into a file.
+#'
+#' @param path the path of the Rd file
+#' @param file the path to save the roxygen documentation
+#' @param usage logical: whether to include the usage section in the output
+#' @return a character vector if \code{file} is not specified, or write the
+#'   vector into a file
+#' @export
+#' @author Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.org}&gt;
 parse_and_save &lt;- function(path, file, usage = FALSE) {
   parsed &lt;- parse_file(path)
   output &lt;- create_roxygen(parsed, usage = usage)
   if (missing(file)) output else
-    cat(paste(output, collapse = &quot;\n&quot;), file = file)
-}</code></pre>
-<p>With <strong>roxygen2</strong> (typically using
-<code>roxygenize()</code>), we can create the real Rd file from the
-above source code like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rd.file <span class="ot">=</span> <span class="fu">system.file</span>(<span class="st">&#39;examples&#39;</span>, <span class="st">&#39;parse_and_save.Rd&#39;</span>, <span class="at">package =</span> <span class="st">&#39;Rd2roxygen&#39;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(rd.file), <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
+	cat(paste(output, collapse = &quot;\n&quot;), file = file)
+}
+</code></pre>
+<p>With <strong>roxygen2</strong> (typically using <code>roxygenize()</code>), we can create the real
+Rd file from the above source code like this:</p>
+<pre><code class="language-r">rd.file = system.file('examples', 'parse_and_save.Rd', package = 'Rd2roxygen')
+cat(readLines(rd.file), sep = '\n')
+</code></pre>
 <pre><code>\name{parse_and_save}
 \alias{parse_and_save}
 \title{Parse the input Rd file and save the roxygen documentation into a file.}
@@ -425,34 +62,30 @@ into a file}
 \author{Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.org}&gt;}
 \arguments{\item{path}{the path of the Rd file}
 \item{file}{the path to save the roxygen documentation}
-\item{usage}{logical: whether to include the usage section in the output}}</code></pre>
-<p>The <strong>Rd2roxygen</strong> package goes exactly in the
-<em>opposite</em> way – it parses the Rd files and turns them back to
-roxygen comments. We can either do this job on single Rd files, or just
-convert the whole package. The latter might be more useful for
-developers who are considering the transition from Rd to roxygen.</p>
-<div id="convert-a-whole-package" class="section level1">
-<h1>Convert a whole package</h1>
-<p>The function <code>Rd2roxygen::Rd2roxygen()</code> can take a path of
-a source package, parse all the Rd files under the <code>man</code>
-directory, and write the roxygen comments right above the source code of
-the functions under the <code>R</code> directory. See
+\item{usage}{logical: whether to include the usage section in the output}}
+</code></pre>
+<p>The <strong>Rd2roxygen</strong> package goes exactly in the <em>opposite</em> way – it parses
+the Rd files and turns them back to roxygen comments. We can either do this
+job on single Rd files, or just convert the whole package. The latter might
+be more useful for developers who are considering the transition from Rd to
+roxygen.</p>
+<h2 id="convert-a-whole-package">Convert a whole package</h2>
+<p>The function <code>Rd2roxygen::Rd2roxygen()</code> can take a path of a source package, parse all
+the Rd files under the <code>man</code> directory, and write the roxygen comments right
+above the source code of the functions under the <code>R</code> directory. See
 <code>?Rd2roxygen</code> for an example.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Rd2roxygen<span class="sc">::</span><span class="fu">Rd2roxygen</span>(<span class="st">&#39;path/to/source/pkg&#39;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="do">## there must be &#39;man&#39; and &#39;R&#39; directories under this path</span></span></code></pre></div>
-<p>Note the path to the package should not be <code>.</code>. You are
-recommended to call this function in the directory that contains the
-source package.</p>
-</div>
-<div id="parse-a-single-rd-file" class="section level1">
-<h1>Parse a single Rd file</h1>
-<p>We can parse a single Rd file and create the roxygen comments as well
-with <code>parse_file()</code> and <code>create_roxygen()</code>,
-e.g.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rd2roxygen)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">## we can specify the roxygen comments prefix (#&#39; by default)</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">roxygen.comment =</span> <span class="st">&quot;##&#39; &quot;</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(info <span class="ot">&lt;-</span> <span class="fu">parse_file</span>(rd.file))</span></code></pre></div>
+<pre><code class="language-r">Rd2roxygen::Rd2roxygen('path/to/source/pkg')
+## there must be 'man' and 'R' directories under this path
+</code></pre>
+<p>Note the path to the package should not be <code>.</code>. You are recommended to call this function in the directory that contains the source package.</p>
+<h2 id="parse-a-single-rd-file">Parse a single Rd file</h2>
+<p>We can parse a single Rd file and create the roxygen comments as well with
+<code>parse_file()</code> and <code>create_roxygen()</code>, e.g.</p>
+<pre><code class="language-r">library(Rd2roxygen)
+## we can specify the roxygen comments prefix (#' by default)
+options(roxygen.comment = &quot;##' &quot;)
+str(info &lt;- parse_file(rd.file))
+</code></pre>
 <pre><code>List of 7
  $ title : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
  $ usage : chr &quot;parse_and_save(path, file, usage=FALSE)&quot;
@@ -460,92 +93,61 @@ e.g.</p>
  $ value : chr &quot;a character vector if \\code{file} is not specified, or write the vector\ninto a file&quot;
  $ author: chr &quot;Hadley Wickham; modified by Yihui Xie &lt;\\url{http://yihui.org}&gt;&quot;
  $ name  : chr &quot;parse_and_save&quot;
- $ params: chr [1:3] &quot;path the path of the Rd file&quot; &quot;file the path to save the roxygen documentation&quot; &quot;usage logical: whether to include the usage section in the output&quot;</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># parse_and_save() combines these two steps</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">create_roxygen</span>(info), <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
-<pre><code>##&#39; Parse the input Rd file and save the roxygen documentation into a file.
-##&#39; 
-##&#39; Parse the input Rd file and save the roxygen documentation into a file.
-##&#39; 
-##&#39; 
-##&#39; @param path the path of the Rd file
-##&#39; @param file the path to save the roxygen documentation
-##&#39; @param usage logical: whether to include the usage section in the output
-##&#39; @return a character vector if \code{file} is not specified, or write the
-##&#39; vector into a file
-##&#39; @author Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.org}&gt;</code></pre>
-</div>
-<div id="roxygenize-and-build-a-package" class="section level1">
-<h1>Roxygenize and build a package</h1>
-<p>This package also provides a tool <code>roxygen_and_build()</code>
-(or in short <code>rab()</code>) to help us build the package.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rab</span>(pkg, <span class="at">build =</span> <span class="cn">TRUE</span>, <span class="at">build.opts =</span> <span class="st">&quot;--no-manual&quot;</span>,</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">install =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">install.opts =</span> <span class="cf">if</span> (build) <span class="st">&quot;&quot;</span> <span class="cf">else</span> <span class="st">&quot;--with-keep.source&quot;</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">check =</span> <span class="cn">FALSE</span>, <span class="at">check.opts =</span> <span class="st">&quot;--as-cran --no-manual&quot;</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">remove.check =</span> <span class="cn">TRUE</span>, <span class="at">reformat =</span> <span class="cn">TRUE</span>, <span class="at">before =</span> <span class="cn">NULL</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    ...)</span></code></pre></div>
-<p>The main feature of <code>rab()</code> is the option to “reformat”
-the code in the usage and example sections. If we specify
-<code>reformat = TRUE</code> in <code>rab()</code>, the code will be
-reformated like this:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## original code</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>rab<span class="ot">=</span><span class="cf">function</span>(pkg,<span class="at">build=</span><span class="cn">TRUE</span>,<span class="at">install=</span><span class="cn">FALSE</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">check=</span><span class="cn">FALSE</span>,<span class="at">check.opts=</span><span class="st">&#39;&#39;</span>,<span class="at">remove.check=</span><span class="cn">TRUE</span>,<span class="at">reformat=</span><span class="cn">TRUE</span>,...){}</span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">## the reformatted code; note the spaces and indent</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>rab <span class="ot">=</span> <span class="cf">function</span>(pkg, <span class="at">build =</span> <span class="cn">TRUE</span>, <span class="at">install =</span> <span class="cn">FALSE</span>, <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">check.opts =</span> <span class="st">&quot;&quot;</span>, <span class="at">remove.check =</span> <span class="cn">TRUE</span>, <span class="at">reformat =</span> <span class="cn">TRUE</span>, ...) {</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>Note this functionality depends on the package <a href="https://yihui.org/formatR/"><strong>formatR</strong></a>, and
-sometimes it might not be possible to reformat the code, e.g. the
-<code>\dontrun{}</code> command in Rd can contain arbitrary texts, which
-means there could be illegal R expressions and <strong>formatR</strong>
-will be unable to format the code. In this case, the original code will
-not be reformatted and a message will be printed on screen.</p>
-</div>
-<div id="about-this-vignette" class="section level1">
-<h1>About this vignette</h1>
-<p>This vignette was built using the vignette engine
-<code>knitr::rmarkdown</code> in the <a href="https://yihui.org/knitr/"><strong>knitr</strong></a> package. You
-can find the source in the <a href="https://github.com/yihui/Rd2roxygen/tree/master/vignettes">Rd2roxygen
-repository</a> on Github, or</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system.file</span>(<span class="st">&#39;doc&#39;</span>, <span class="st">&#39;Rd2roxygen.Rmd&#39;</span>, <span class="at">package=</span><span class="st">&#39;Rd2roxygen&#39;</span>)</span></code></pre></div>
-</div>
-
-<script type="text/javascript">
-window.onload = function() {
-  var i, fig = 1, caps = document.getElementsByClassName('caption');
-  for (i = 0; i < caps.length; i++) {
-    var cap = caps[i];
-    if (cap.parentElement.className !== 'figure' || cap.nodeName !== 'P')
-      continue;
-    cap.innerHTML = '<span>Figure ' + fig + ':</span> ' + cap.innerHTML;
-    fig++;
-  }
-  fig = 1;
-  caps = document.getElementsByTagName('caption');
-  for (i = 0; i < caps.length; i++) {
-    var cap = caps[i];
-    if (cap.parentElement.nodeName !== 'TABLE') continue;
-    cap.innerHTML = '<span>Table ' + fig + ':</span> ' + cap.innerHTML;
-    fig++;
-  }
+ $ params: chr [1:3] &quot;path the path of the Rd file&quot; &quot;file the path to save the roxygen documentation&quot; &quot;usage logical: whether to include the usage section in the output&quot;
+</code></pre>
+<pre><code class="language-r"># parse_and_save() combines these two steps
+cat(create_roxygen(info), sep = '\n')
+</code></pre>
+<pre><code>##' Parse the input Rd file and save the roxygen documentation into a file.
+##' 
+##' Parse the input Rd file and save the roxygen documentation into a file.
+##' 
+##' 
+##' @param path the path of the Rd file
+##' @param file the path to save the roxygen documentation
+##' @param usage logical: whether to include the usage section in the output
+##' @return a character vector if \code{file} is not specified, or write the
+##' vector into a file
+##' @author Hadley Wickham; modified by Yihui Xie &lt;\url{http://yihui.org}&gt;
+</code></pre>
+<h2 id="roxygenize-and-build-a-package">Roxygenize and build a package</h2>
+<p>This package also provides a tool <code>roxygen_and_build()</code> (or in short <code>rab()</code>)
+to help us build the package.</p>
+<pre><code class="language-r">rab(pkg, build = TRUE, build.opts = &quot;--no-manual&quot;,
+    install = FALSE,
+    install.opts = if (build) &quot;&quot; else &quot;--with-keep.source&quot;,
+    check = FALSE, check.opts = &quot;--as-cran --no-manual&quot;,
+    remove.check = TRUE, reformat = TRUE, before = NULL,
+    ...)
+</code></pre>
+<p>The main feature of <code>rab()</code> is the option to “reformat” the code in the
+usage and example sections. If we specify <code>reformat = TRUE</code> in <code>rab()</code>, the
+code will be reformated like this:</p>
+<pre><code class="language-r">## original code
+rab=function(pkg,build=TRUE,install=FALSE,
+check=FALSE,check.opts='',remove.check=TRUE,reformat=TRUE,...){}
+</code></pre>
+<pre><code class="language-r">## the reformatted code; note the spaces and indent
+rab = function(pkg, build = TRUE, install = FALSE, check = FALSE,
+    check.opts = &quot;&quot;, remove.check = TRUE, reformat = TRUE, ...) {
 }
-</script>
-
-
-<!-- code folding -->
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
+</code></pre>
+<p>Note this functionality depends on the package <a href="https://yihui.org/formatR/"><strong>formatR</strong></a>, and
+sometimes it might not be possible to reformat the code, e.g. the
+<code>\dontrun{}</code> command in Rd can contain arbitrary texts, which means there
+could be illegal R expressions and <strong>formatR</strong> will be unable to format the
+code. In this case, the original code will not be reformatted and a message
+will be printed on screen.</p>
+<h2 id="about-this-vignette">About this vignette</h2>
+<p>This vignette was built using the vignette engine <code>knitr::rmarkdown</code>
+in the <a href="https://yihui.org/knitr/"><strong>knitr</strong></a> package. You can find the source
+in the <a href="https://github.com/yihui/Rd2roxygen/tree/master/vignettes">Rd2roxygen
+repository</a> on
+Github, or</p>
+<pre><code class="language-r">system.file('doc', 'Rd2roxygen.Rmd', package='Rd2roxygen')
+</code></pre>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
 </body>
 </html>
