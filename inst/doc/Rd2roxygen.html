@@ -11,7 +11,7 @@
 <div class="frontmatter">
 <div class="title"><h1>Rd2roxygen</h1></div>
 <div class="author"><h2>Yihui Xie</h2></div>
-<div class="date"><h3>2024-03-11</h3></div>
+<div class="date"><h3>2024-04-15</h3></div>
 </div>
 <div class="body">
 <div id="TOC">
@@ -86,14 +86,15 @@ above the source code of the functions under the <code>R</code> directory. See
 options(roxygen.comment = &quot;##' &quot;)
 str(info &lt;- parse_file(rd.file))
 </code></pre>
-<pre><code>List of 7
- $ title : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
- $ usage : chr &quot;parse_and_save(path, file, usage=FALSE)&quot;
- $ desc  : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
- $ value : chr &quot;a character vector if \\code{file} is not specified, or write the vector\ninto a file&quot;
- $ author: chr &quot;Hadley Wickham; modified by Yihui Xie &lt;\\url{http://yihui.org}&gt;&quot;
- $ name  : chr &quot;parse_and_save&quot;
- $ params: chr [1:3] &quot;path the path of the Rd file&quot; &quot;file the path to save the roxygen documentation&quot; &quot;usage logical: whether to include the usage section in the output&quot;
+<pre><code>List of 8
+ $ title  : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
+ $ usage  : chr &quot;parse_and_save(path, file, usage=FALSE)&quot;
+ $ desc   : chr &quot;Parse the input Rd file and save the roxygen documentation into a file.&quot;
+ $ section: Named list()
+ $ value  : chr &quot;a character vector if \\code{file} is not specified, or write the vector\ninto a file&quot;
+ $ author : chr &quot;Hadley Wickham; modified by Yihui Xie &lt;\\url{http://yihui.org}&gt;&quot;
+ $ name   : chr &quot;parse_and_save&quot;
+ $ params : chr [1:3] &quot;path the path of the Rd file&quot; &quot;file the path to save the roxygen documentation&quot; &quot;usage logical: whether to include the usage section in the output&quot;
 </code></pre>
 <pre><code class="language-r"># parse_and_save() combines these two steps
 cat(create_roxygen(info), sep = '\n')
