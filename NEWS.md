@@ -1,3 +1,7 @@
+# CHANGES IN Rd2roxygen VERSION 1.17
+
+- `rab(reformat = TRUE)` will remove `withAutoprint()` from roxygen's `@examplesIf` output to keep compatibility with R < 3.4.0.
+
 # CHANGES IN Rd2roxygen VERSION 1.16
 
 - Process all sections instead of only the first (#25, #36).
